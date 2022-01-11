@@ -15,3 +15,32 @@
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
 }
+
+.header {
+  max-width: 880px;
+  min-height: 74px;
+  /* Позиционирование */
+  margin: 0 auto;
+  padding-top: 45px;
+  border-bottom: 1px solid #545454;
+}
+
+@media screen and (max-width: 880px) {
+  .header {
+    min-height: 56px;
+    /* Позиционирование */
+    padding-top: 28px;
+  }
+}
+
+.header__logo {
+  width: 142px;
+}
+
+@media screen and (max-width: 880px) {
+  .header__logo {
+    width: 104px;
+    /* Позиционирование */
+    margin-left: 27px;
+  }
+}
