@@ -253,3 +253,40 @@
   background-color: #fff;
   cursor: pointer;
 }
+
+.footer {
+  max-width: 880px;
+  /* Позиционирование */
+  margin: 0 auto;
+  padding: 66px 0 60px 0;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 920px) {
+  .footer {
+    padding: 66px 19px 60px 19px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .footer {
+    padding: 48px 19px 36px 19px;
+  }
+}
+
+.footer__copyright {
+  margin: 0;
+  /* Параметры текста */
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: #545454;
+}
+
+@media screen and (max-width: 550px) {
+  .footer__copyright {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+
