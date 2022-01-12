@@ -1,0 +1,12 @@
+.header__logo {
+  width: 142px;
+  /* Позиционирование */
+  display: block;
+}
+
+@media screen and (max-width: 550px) {
+  .header__logo {
+    width: 104px;
+    height: 24px;
+  }
+}

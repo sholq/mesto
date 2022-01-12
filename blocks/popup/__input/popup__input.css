@@ -1,0 +1,12 @@
+.popup__input {
+  width: 100%;
+  /* Позиционирование */
+  margin: 30px 0 0;
+  padding: 0 0 10px;
+  /* Параметры текста */
+  font-size: 14px;
+  line-height: 17px;
+  /* Стилизация */
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}

@@ -1,0 +1,17 @@
+.popup__header {
+  margin: 0 0 18px;
+  /* Параметры текста */
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  color: #000;
+}
+
+@media screen and (max-width: 550px) {
+  .popup__header {
+    margin: 0 0 45px;
+    /* Параметры текста */
+    font-size: 18px;
+    line-height: 22px;
+  }
+}

@@ -1,0 +1,15 @@
+.header {
+  max-width: 880px;
+  /* Позиционирование */
+  margin: 0 auto;
+  padding: 45px 0 41px 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-bottom: 1px solid #545454;
+}
+
+@media screen and (max-width: 920px) {
+  .header {
+    padding: 28px 27px 32px 27px;
+  }
+}

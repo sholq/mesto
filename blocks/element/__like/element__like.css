@@ -1,0 +1,24 @@
+.element__like {
+  width: 22px;
+  /* Позиционирование */
+  margin: auto 0 auto auto;
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  /* Стилизация */
+  outline: none;
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.element__like:hover {
+  opacity: 0.5;
+}

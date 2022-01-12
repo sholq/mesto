@@ -1,0 +1,23 @@
+.profile__info {
+  /* Позиционирование */
+  margin: auto 0;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: -webkit-max-content 18px -webkit-max-content;
+  -ms-grid-columns: max-content 18px max-content;
+  grid-template-columns: repeat(2, -webkit-max-content);
+  grid-template-columns: repeat(2, max-content);
+  -ms-grid-rows: 39px 16px 18px;
+  grid-template-rows: 39px 18px;
+  gap: 16px 18px;
+}
+
+@media screen and (max-width: 550px) {
+  .profile__info {
+    -ms-grid-rows: 26px 14px 14px;
+    grid-template-rows: 26px 14px;
+    gap: 14px 10px;
+    position: relative;
+    left: 14px;
+  }
+}

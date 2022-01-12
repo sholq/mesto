@@ -1,0 +1,7 @@
+.element {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  /* Позиционирование */
+  margin: 0;
+}
