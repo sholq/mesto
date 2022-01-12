@@ -1,13 +1,21 @@
 .profile__description {
+  max-width: 500px;
+  /* Позиционирование */
   margin: 0;
   /* Параметры текста */
   font-weight: normal;
   font-size: 18px;
   line-height: 22px;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 550px) {
   .profile__description {
+    max-width: 220px;
+    /* Параметры текста */
     font-size: 14px;
     line-height: 17px;
     text-align: center;

@@ -2,6 +2,7 @@
   width: 24px;
   height: 24px;
   /* Позиционирование */
+  margin-bottom: 9px;
   padding: 0;
   -ms-flex-item-align: end;
       align-self: flex-end;
@@ -29,5 +30,7 @@
   .profile__edit-button {
     width: 18px;
     height: 18px;
+    /* Позиционирование */
+    margin-bottom: 8px;
   }
 }

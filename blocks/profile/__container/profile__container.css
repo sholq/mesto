@@ -1,13 +1,13 @@
 .profile__container {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: -webkit-max-content 30px -webkit-max-content;
-  -ms-grid-columns: max-content 30px max-content;
-  grid-template-columns: repeat(2, -webkit-max-content);
-  grid-template-columns: repeat(2, max-content);
-  -webkit-column-gap: 30px;
-     -moz-column-gap: 30px;
-          column-gap: 30px;
+  -ms-grid-columns: minmax(120px, -webkit-max-content) 30px minmax(120px, -webkit-max-content);
+  -ms-grid-columns: minmax(120px, max-content) 30px minmax(120px, max-content);
+  grid-template-columns: repeat(2, minmax(120px, -webkit-max-content));
+  grid-template-columns: repeat(2, minmax(120px, max-content));
+          -webkit-column-gap: 30px;
+             -moz-column-gap: 30px;
+                  column-gap: 30px;
 }
 
 @media screen and (max-width: 550px) {

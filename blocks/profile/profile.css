@@ -10,10 +10,14 @@
   -ms-grid-columns: (-webkit-max-content);
   -ms-grid-columns: (max-content);
   grid-template-columns: repeat(2, -webkit-max-content);
-  grid-template-columns: repeat(2, max-content);
+  grid-template-columns: repeat(2, minmax(150px, -webkit-max-content));
+  grid-template-columns: repeat(2, minmax(150px, max-content));
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+          -webkit-column-gap: 20px;
+             -moz-column-gap: 20px;
+                  column-gap: 20px;
 }
 
 @media screen and (max-width: 920px) {
