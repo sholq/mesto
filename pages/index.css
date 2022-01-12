@@ -24,7 +24,8 @@
   /* Позиционирование */
   margin: 0 auto;
   padding: 45px 0 41px 0;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   border-bottom: 1px solid #545454;
 }
 
@@ -53,10 +54,17 @@
   /* Позиционирование */
   margin: 0 auto;
   padding: 40px 0 50px 0;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: (-webkit-max-content);
+  -ms-grid-columns: (max-content);
+  grid-template-columns: repeat(2, -webkit-max-content);
   grid-template-columns: repeat(2, max-content);
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 @media screen and (max-width: 920px) {
@@ -68,19 +76,27 @@
 @media screen and (max-width: 710px) {
   .profile {
     padding: 42px 19px 36px 19px;
+    -ms-grid-columns: 100%;
     grid-template-columns: 100%;
     row-gap: 36px;
   }
 }
 
 .profile__container {
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: -webkit-max-content 30px -webkit-max-content;
+  -ms-grid-columns: max-content 30px max-content;
+  grid-template-columns: repeat(2, -webkit-max-content);
   grid-template-columns: repeat(2, max-content);
-  column-gap: 30px;
+  -webkit-column-gap: 30px;
+     -moz-column-gap: 30px;
+          column-gap: 30px;
 }
 
 @media screen and (max-width: 550px) {
   .profile__container {
+    -ms-grid-columns: 100%;
     grid-template-columns: 100%;
     row-gap: 26px;
     justify-items: center;
@@ -97,14 +113,20 @@
 .profile__info {
   /* Позиционирование */
   margin: auto 0;
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: -webkit-max-content 18px -webkit-max-content;
+  -ms-grid-columns: max-content 18px max-content;
+  grid-template-columns: repeat(2, -webkit-max-content);
   grid-template-columns: repeat(2, max-content);
+  -ms-grid-rows: 39px 16px 18px;
   grid-template-rows: 39px 18px;
   gap: 16px 18px;
 }
 
 @media screen and (max-width: 550px) {
   .profile__info {
+    -ms-grid-rows: 26px 14px 14px;
     grid-template-rows: 26px 14px;
     gap: 14px 10px;
     position: relative;
@@ -149,10 +171,17 @@
   height: 24px;
   /* Позиционирование */
   padding: 0;
-  align-self: flex-end;
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   /* Стилизация */
   cursor: pointer;
   outline: none;
@@ -177,9 +206,15 @@
   /* Позиционирование */
   margin: auto 0 auto auto;
   padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   /* Стилизация */
   cursor: pointer;
   outline: none;
@@ -202,15 +237,29 @@
   max-width: 880px;
   /* Позиционирование */
   margin: 0 auto;
+  display: -ms-grid;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+  gap: 20px 17px;
+}
+
+.elements__list {
+  width: 100%;
+  /* Позиционирование */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: -ms-grid;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
   gap: 20px 17px;
 }
 
 @media screen and (max-width: 920px) {
-  .elements {
+  .elements__list {
     padding: 0 19px;
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
   }
 }
 
@@ -227,28 +276,41 @@
   height: 282px;
   /* Позиционирование */
   display: block;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .element__container {
   width: 100%;
   /* Позиционирование */
   padding: 25px 20px;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: 1fr 31px -webkit-max-content;
+  -ms-grid-columns: 1fr 31px max-content;
+  grid-template-columns: 1fr -webkit-max-content;
   grid-template-columns: 1fr max-content;
-  column-gap: 31px;
-  align-items: center;
+  -webkit-column-gap: 31px;
+     -moz-column-gap: 31px;
+          column-gap: 31px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   /* Фон */
   background-color: #fff;
 }
 
 .element__caption {
+  margin: 0;
+  /* Параметры текста */
   font-weight: 900;
   font-size: 24px;
   line-height: 29px;
   color: #000;
-  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -258,9 +320,15 @@
   /* Позиционирование */
   margin: auto 0 auto auto;
   padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   /* Стилизация */
   outline: none;
   border: none;
@@ -277,7 +345,8 @@
   /* Позиционирование */
   margin: 0 auto;
   padding: 66px 0 60px 0;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 @media screen and (max-width: 920px) {
@@ -313,8 +382,12 @@
   height: 100%;
   /* Позиционирование */
   display: none;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   position: fixed;
   top: 0;
   z-index: 1;
@@ -327,9 +400,15 @@
   /* Позиционирование */
   margin: 0;
   padding: 34px 36px 37px;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   position: relative;
   /* Фон */
   background-color: #fff;
@@ -409,9 +488,15 @@
   width: 32px;
   /* Позиционирование */
   padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   position: absolute;
   top: -40px;
   right: -40px;
