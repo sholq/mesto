@@ -1,4 +1,6 @@
 let page = document.querySelector('.page');
+
+// Всплывающая форма
 let popup = page.querySelector('.popup');
 let profileEditButton = page.querySelector('.profile__edit-button');
 let popupCloseButton = page.querySelector('.popup__close-button');
@@ -28,3 +30,16 @@ function popupFormSubmitHandler (evt) {
 profileEditButton.addEventListener('click', switchPopup);
 popupCloseButton.addEventListener('click', switchPopup);
 popupForm.addEventListener('submit', popupFormSubmitHandler);
+
+// Кнопка лайк
+let likeButtons = page.querySelectorAll('.element__like');
+
+function switchLike(like) {
+  like.classList.toggle('element__like_active');
+}
+
+for (let i = 0; i < likeButtons.length; i++) {
+  likeButtons[i].addEventListener('click', () => {
+    switchLike(likeButtons[i]);
+  });
+}
