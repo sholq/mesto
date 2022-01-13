@@ -1,11 +1,30 @@
-const page = document.querySelector('.page');
-const popUp = page.querySelector('.popup');
-const editButton = page.querySelector('.profile__edit-button');
-const closeButton = page.querySelector('.popup__close-button');
+let page = document.querySelector('.page');
+let popup = page.querySelector('.popup');
+let profileEditButton = page.querySelector('.profile__edit-button');
+let popupCloseButton = page.querySelector('.popup__close-button');
+let popupForm = page.querySelector('.popup__container');
+let popupNameInput = page.querySelector('.popup__input_type_name');
+let popupDescriptionInput = page.querySelector('.popup__input_type_description');
+let profileName = page.querySelector('.profile__name');
+let profileDesctiption = page.querySelector('.profile__description');
 
-function switchPopUp() {
-  popUp.classList.toggle('popup_opened');
+function switchPopup() {
+  if (!popup.classList.contains('popup__opened')) {
+    popupNameInput.value = profileName.textContent;
+    popupDescriptionInput.value = profileDesctiption.textContent;
+  }
+  popup.classList.toggle('popup_opened');
 }
 
-editButton.addEventListener('click', switchPopUp);
-closeButton.addEventListener('click', switchPopUp);
+function popupFormSubmitHandler (evt) {
+  evt.preventDefault();
+  let popupNameInputValue = popupNameInput.value;
+  let popupDescriptionInputValue = popupDescriptionInput.value;
+  profileName.textContent = popupNameInputValue;
+  profileDesctiption.textContent = popupDescriptionInputValue;
+  switchPopup();
+}
+
+profileEditButton.addEventListener('click', switchPopup);
+popupCloseButton.addEventListener('click', switchPopup);
+popupForm.addEventListener('submit', popupFormSubmitHandler);
