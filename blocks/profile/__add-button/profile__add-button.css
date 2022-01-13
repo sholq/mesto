@@ -18,6 +18,9 @@
   outline: none;
 	border: 1px solid #fff;
   background-color: #000;
+  background-image: url(../../../image/add-button.svg);
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .profile__add-button:hover {

@@ -20,6 +20,9 @@
   outline: none;
 	border: 1px solid #fff;
   background-color: #000;
+  background-image: url(../../../image/edit-button.svg);
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .profile__edit-button:hover {
