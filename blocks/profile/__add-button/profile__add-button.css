@@ -16,7 +16,8 @@
   /* Стилизация */
   cursor: pointer;
   outline: none;
-	border: 1px solid #fff;
+	border: 2px solid #fff;
+  border-radius: 2px;
   background-color: #000;
   background-image: url(../../../image/add-button.svg);
   background-repeat: no-repeat;
