@@ -9,6 +9,9 @@ initialElements.forEach( item => {
   element.querySelector('.element__image').src = item.link;
   element.querySelector('.element__image').alt = item.name;
   element.querySelector('.element__caption').textContent = item.name;
+  element.querySelector('.element__like').addEventListener('click', evt => {
+    evt.target.classList.toggle('element__like_active');
+  })
   elementsList.append(element);
 });
 
@@ -72,16 +75,3 @@ addPopupCloseButton.addEventListener('click', switchAddPopup);
 
 editPopupForm.addEventListener('submit', submitEditPopupForm);
 addPopupForm.addEventListener('submit', submitAddPopupForm);
-
-// Кнопка лайк
-let likeButtons = page.querySelectorAll('.element__like');
-
-function switchLike(like) {
-  like.classList.toggle('element__like_active');
-}
-
-for (let i = 0; i < likeButtons.length; i++) {
-  likeButtons[i].addEventListener('click', () => {
-    switchLike(likeButtons[i]);
-  });
-}
