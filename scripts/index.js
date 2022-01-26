@@ -12,6 +12,9 @@ initialElements.forEach( item => {
   element.querySelector('.element__like').addEventListener('click', evt => {
     evt.target.classList.toggle('element__like_active');
   })
+  element.querySelector('.element__delete').addEventListener('click', evt => {
+    evt.target.closest('.element').remove();
+  })
   elementsList.append(element);
 });
 

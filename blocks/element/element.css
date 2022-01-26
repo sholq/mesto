@@ -3,5 +3,6 @@
   border-radius: 10px;
   overflow: hidden;
   /* Позиционирование */
+  position: relative;
   margin: 0;
 }

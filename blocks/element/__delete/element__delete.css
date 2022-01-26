@@ -1,0 +1,22 @@
+.element__delete {
+  width: 18px;
+  height: 19px;
+  /* Позиционирование */
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  /* Стилизация */
+  outline: none;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  background-image: url(../../../image/delete-icon.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.element__delete:hover {
+  opacity: 0.6;
+}
