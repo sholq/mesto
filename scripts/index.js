@@ -1,35 +1,57 @@
-let page = document.querySelector('.page');
+const page = document.querySelector('.page');
 
 // Всплывающая форма
-let popup = page.querySelector('.popup');
-let profileEditButton = page.querySelector('.profile__edit-button');
-let popupCloseButton = page.querySelector('.popup__close-button');
-let popupForm = page.querySelector('.popup__container');
-let popupNameInput = page.querySelector('.popup__input_type_name');
-let popupDescriptionInput = page.querySelector('.popup__input_type_description');
-let profileName = page.querySelector('.profile__name');
-let profileDesctiption = page.querySelector('.profile__description');
+const editPopup = page.querySelector('.edit-popup');
+const editPopupCloseButton = editPopup.querySelector('.popup__close-button');
+const editPopupForm = editPopup.querySelector('.popup__container');
+const editPopupNameInput = editPopup.querySelector('.popup__input_type_name');
+const editPopupDescriptionInput = editPopup.querySelector('.popup__input_type_description');
 
-function switchPopup() {
-  if (!popup.classList.contains('popup__opened')) {
-    popupNameInput.value = profileName.textContent;
-    popupDescriptionInput.value = profileDesctiption.textContent;
+const addPopup = page.querySelector('.add-popup');
+const addPopupCloseButton = addPopup.querySelector('.popup__close-button');
+const addPopupForm = addPopup.querySelector('.popup__container');
+const addPopupNameInput = addPopup.querySelector('.popup__input_type_name');
+const addPopupLinkInput = addPopup.querySelector('.popup__input_type_link');
+
+const profileName = page.querySelector('.profile__name');
+const profileDesctiption = page.querySelector('.profile__description');
+const profileEditButton = page.querySelector('.profile__edit-button');
+const profileAddButton = page.querySelector('.profile__add-button');
+
+
+function switchEditPopup() {
+  if (!editPopup.classList.contains('popup__opened')) {
+    editPopupNameInput.value = profileName.textContent;
+    editPopupDescriptionInput.value = profileDesctiption.textContent;
   }
-  popup.classList.toggle('popup_opened');
+  editPopup.classList.toggle('popup_opened');
 }
 
-function popupFormSubmitHandler (evt) {
+function switchAddPopup() {
+  if (!addPopup.classList.contains('popup__opened')) {
+    addPopupNameInput.value = '';
+    addPopupLinkInput.value = '';
+  }
+  addPopup.classList.toggle('popup_opened');
+}
+
+function editPopupFormSubmitHandler(evt) {
   evt.preventDefault();
-  let popupNameInputValue = popupNameInput.value;
-  let popupDescriptionInputValue = popupDescriptionInput.value;
-  profileName.textContent = popupNameInputValue;
-  profileDesctiption.textContent = popupDescriptionInputValue;
-  switchPopup();
+  const editPopupNameInputValue = editPopupNameInput.value;
+  const editPopupDescriptionInputValue = editPopupDescriptionInput.value;
+  profileName.textContent = editPopupNameInputValue;
+  profileDesctiption.textContent = editPopupDescriptionInputValue;
+  switchEditPopup();
 }
 
-profileEditButton.addEventListener('click', switchPopup);
-popupCloseButton.addEventListener('click', switchPopup);
-popupForm.addEventListener('submit', popupFormSubmitHandler);
+profileEditButton.addEventListener('click', switchEditPopup);
+editPopupCloseButton.addEventListener('click', switchEditPopup);
+
+profileAddButton.addEventListener('click', switchAddPopup);
+addPopupCloseButton.addEventListener('click', switchAddPopup);
+
+editPopupForm.addEventListener('submit', editPopupFormSubmitHandler);
+// addPopupForm.addEventListener('submit', addPopupFormSubmitHandler);
 
 const initialCards = [
   {

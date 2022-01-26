@@ -14,3 +14,7 @@
 .popup__input:focus {
   outline: none;
 }
+
+.popup__input::placeholder {
+  color: #C4C4C4;
+}
