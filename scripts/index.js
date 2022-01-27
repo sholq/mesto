@@ -1,12 +1,16 @@
 const page = document.querySelector('.page');
 
+function switchPopup(popup) {
+  popup.classList.toggle('popup_opened');
+}
+
 // Инициализация
 const elementsList = page.querySelector('.elements__list');
 const elementTemplate = document.querySelector('#element-template').content;
 const elementPopupTemplate = document.querySelector('#element-popup-template').content;
 
 initialElements.forEach( item => {
-  // Добавление кароточки элемента
+  // Добавление карточки элемента
   const element = elementTemplate.querySelector('.element').cloneNode(true);
   const elementImage = element.querySelector('.element__image');
   const elementCaption = element.querySelector('.element__caption');
@@ -33,8 +37,9 @@ initialElements.forEach( item => {
   elementPopupImage.src = item.link;
   elementPopupImage.alt = item.name;
   elementPopupCaption.textContent = item.name;
+
   elementPopupCloseButton.addEventListener('click', () => {
-    elementPopup.classList.toggle('popup_opened');
+    switchPopup(elementPopup);
   });
 
   // Открытие всплывающего окна элемента по клику на картинку
@@ -64,13 +69,12 @@ const profileDesctiption = page.querySelector('.profile__description');
 const profileEditButton = page.querySelector('.profile__edit-button');
 const profileAddButton = page.querySelector('.profile__add-button');
 
-
 function switchEditPopup() {
   if (!editPopup.classList.contains('popup_opened')) {
     editPopupNameInput.value = profileName.textContent;
     editPopupDescriptionInput.value = profileDesctiption.textContent;
   }
-  editPopup.classList.toggle('popup_opened');
+  switchPopup(editPopup);
 }
 
 function switchAddPopup() {
@@ -78,7 +82,7 @@ function switchAddPopup() {
     addPopupNameInput.value = '';
     addPopupLinkInput.value = '';
   }
-  addPopup.classList.toggle('popup_opened');
+  switchPopup(addPopup);
 }
 
 function submitEditPopupForm(evt) {
@@ -91,9 +95,13 @@ function submitEditPopupForm(evt) {
 function submitAddPopupForm(evt) {
   evt.preventDefault();
   const element = elementTemplate.querySelector('.element').cloneNode(true);
-  element.querySelector('.element__image').src = addPopupLinkInput.value;
-  element.querySelector('.element__image').alt = addPopupNameInput.value;
-  element.querySelector('.element__caption').textContent = addPopupNameInput.value;
+  const elementImage = element.querySelector('.element__image');
+  const elementCaption = element.querySelector('.element__caption');
+
+  elementImage.src = addPopupLinkInput.value;
+  elementImage.alt = addPopupNameInput.value;
+  elementCaption.textContent = addPopupNameInput.value;
+
   elementsList.prepend(element);
   switchAddPopup();
 }
