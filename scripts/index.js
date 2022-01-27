@@ -3,29 +3,57 @@ const page = document.querySelector('.page');
 // Инициализация
 const elementsList = page.querySelector('.elements__list');
 const elementTemplate = document.querySelector('#element-template').content;
+const elementPopupTemplate = document.querySelector('#element-popup-template').content;
 
 initialElements.forEach( item => {
+  // Добавление кароточки элемента
   const element = elementTemplate.querySelector('.element').cloneNode(true);
-  element.querySelector('.element__image').src = item.link;
-  element.querySelector('.element__image').alt = item.name;
-  element.querySelector('.element__caption').textContent = item.name;
-  element.querySelector('.element__like').addEventListener('click', evt => {
+  const elementImage = element.querySelector('.element__image');
+  const elementCaption = element.querySelector('.element__caption');
+  const elementLikeButton = element.querySelector('.element__like');
+  const elementDeleteButton = element.querySelector('.element__delete');
+
+  elementImage.src = item.link;
+  elementImage.alt = item.name;
+  elementCaption.textContent = item.name;
+
+  elementLikeButton.addEventListener('click', evt => {
     evt.target.classList.toggle('element__like_active');
-  })
-  element.querySelector('.element__delete').addEventListener('click', evt => {
+  });
+  elementDeleteButton.addEventListener('click', evt => {
     evt.target.closest('.element').remove();
-  })
+  });
+
+  // Добавление всплывающего окна элемента
+  const elementPopup = elementPopupTemplate.querySelector('.popup').cloneNode(true);
+  const elementPopupImage = elementPopup.querySelector('.popup__element-image');
+  const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
+  const elementPopupCloseButton = elementPopup.querySelector('.popup__close-button');
+
+  elementPopupImage.src = item.link;
+  elementPopupImage.alt = item.name;
+  elementPopupCaption.textContent = item.name;
+  elementPopupCloseButton.addEventListener('click', () => {
+    elementPopup.classList.toggle('popup_opened');
+  });
+
+  // Открытие всплывающего окна элемента по клику на картинку
+  elementImage.addEventListener('click', () => {
+    elementPopup.classList.toggle('popup_opened');
+  });
+
   elementsList.append(element);
+  page.append(elementPopup);
 });
 
 // Всплывающие формы
-const editPopup = page.querySelector('.edit-popup');
+const editPopup = page.querySelector('.popup_edit');
 const editPopupCloseButton = editPopup.querySelector('.popup__close-button');
 const editPopupForm = editPopup.querySelector('.popup__container');
 const editPopupNameInput = editPopup.querySelector('.popup__input_type_name');
 const editPopupDescriptionInput = editPopup.querySelector('.popup__input_type_description');
 
-const addPopup = page.querySelector('.add-popup');
+const addPopup = page.querySelector('.popup_add');
 const addPopupCloseButton = addPopup.querySelector('.popup__close-button');
 const addPopupForm = addPopup.querySelector('.popup__container');
 const addPopupNameInput = addPopup.querySelector('.popup__input_type_name');
@@ -38,7 +66,7 @@ const profileAddButton = page.querySelector('.profile__add-button');
 
 
 function switchEditPopup() {
-  if (!editPopup.classList.contains('popup__opened')) {
+  if (!editPopup.classList.contains('popup_opened')) {
     editPopupNameInput.value = profileName.textContent;
     editPopupDescriptionInput.value = profileDesctiption.textContent;
   }
@@ -46,7 +74,7 @@ function switchEditPopup() {
 }
 
 function switchAddPopup() {
-  if (!addPopup.classList.contains('popup__opened')) {
+  if (!addPopup.classList.contains('popup_opened')) {
     addPopupNameInput.value = '';
     addPopupLinkInput.value = '';
   }
