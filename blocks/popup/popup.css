@@ -15,9 +15,9 @@
   /* Фон */
   background-color: rgba(0, 0, 0, 0.5);
   /* Анимация */
-  opacity: 0;
   visibility: hidden;
-  -webkit-transition: visibility 0s, opacity 0.5s ease-in-out;
-       -o-transition: visibility 0s, opacity 0.5s ease-in-out;
-          transition: visibility 0s, opacity 0.5s ease-in-out;
+  opacity: 0;
+  -webkit-transition: visibility 0.5s, opacity 0.5s ease-in-out;
+       -o-transition: visibility 0.5s, opacity 0.5s ease-in-out;
+          transition: visibility 0.5s, opacity 0.5s ease-in-out;
 }
