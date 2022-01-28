@@ -57,8 +57,13 @@ function switchElementPopup(image) {
   switchPopup(elementPopup);
 }
 
-function addElement(name, link) {
-  // Добавление карточки элемента
+function addElement(element) {
+  // Функция добавляет верстку карточки на страницу
+  elementsList.prepend(element);
+}
+
+function createElement(name, link) {
+  // Функция возвращает верстку карточки элемента
   const element = elementTemplate.querySelector('.element').cloneNode(true);
   const elementImage = element.querySelector('.element__image');
   const elementCaption = element.querySelector('.element__caption');
@@ -76,7 +81,6 @@ function addElement(name, link) {
     elementLikeButton.classList.toggle('element__like_active');
   });
 
-  // Открытие всплывающего окна элемента по клику на картинку
   elementImage.addEventListener('click', () => {
     switchElementPopup(elementImage);
   });
@@ -85,7 +89,7 @@ function addElement(name, link) {
     element.remove();
   });
 
-  elementsList.prepend(element);
+  return element;
 }
 
 function submitEditPopupForm(evt) {
@@ -97,13 +101,15 @@ function submitEditPopupForm(evt) {
 
 function submitAddPopupForm(evt) {
   evt.preventDefault();
-  addElement(addPopupNameInput.value, addPopupLinkInput.value);
+  const element = createElement(addPopupNameInput.value, addPopupLinkInput.value);
+  addElement(element);
   switchAddPopup();
 }
 
 // Массив из файла initial-elements.js
 initialElements.forEach( item => {
-  addElement(item.name, item.link)
+  const newElement = createElement(item.name, item.link);
+  addElement(newElement);
 });
 
 profileEditButton.addEventListener('click', switchEditPopup);
