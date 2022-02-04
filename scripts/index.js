@@ -27,6 +27,14 @@ const elementPopupCloseButton = elementPopup.querySelector('.popup__close-button
 
 function switchPopup(popup) {
   popup.classList.toggle('popup_opened');
+  // Скрытие ошибок формы при закрытии
+  const formElement = popup.querySelector('.popup__form');
+  if (formElement) {
+    const inputElements = Array.from(formElement.querySelectorAll('.popup__input'));
+    inputElements.forEach(inputElement => {
+      hideInputError(formElement, inputElement);
+    });
+  }
 }
 
 function switchEditPopup() {
@@ -121,3 +129,22 @@ elementPopupCloseButton.addEventListener('click', switchElementPopup)
 
 editPopupForm.addEventListener('submit', submitEditPopupForm);
 addPopupForm.addEventListener('submit', submitAddPopupForm);
+
+function setPopupsExternalClosingHandlers() {
+  const popups = Array.from(page.querySelectorAll('.popup'));
+  popups.forEach(popup => {
+    popup.addEventListener('click', evt => {
+      if (evt.target.classList.contains('popup')) {
+        switchPopup(evt.target);
+      }
+    })
+  })
+  window.addEventListener('keydown', evt => {
+    const openedPopup = page.querySelector('.popup_opened');
+    if (evt.key === 'Escape' && openedPopup) {
+      switchPopup(openedPopup);
+    }
+  });
+}
+
+setPopupsExternalClosingHandlers();
