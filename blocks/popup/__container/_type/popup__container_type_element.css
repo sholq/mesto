@@ -1,5 +1,6 @@
-.popup__container_element {
+.popup__container_type_element {
   max-width: 75vw;
+  width: fit-content;
   padding: 0;
   background: none;
   border-radius: 0;
