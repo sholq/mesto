@@ -34,32 +34,44 @@
       <p class="footer__copyright">© 2022 Mesto Russia</p>
     </footer>
 
-    <div class="popup popup_edit">
+    <div class="popup popup_type_edit">
       <div class="popup__container">
         <h2 class="popup__header">Редактировать профиль</h2>
-        <form name="popup-form">
-          <input class="popup__input popup__input_type_name" type="text" name="name" value="Жак-Ив Кусто" autocomplete="off">
-          <input class="popup__input popup__input_type_description" type="text" name="description" value="Исследователь океана, фотограф, режиссёр" autocomplete="off">
+        <form class="popup__form" name="editPopupForm">
+          <label class="popup__field">
+            <input class="popup__input popup__input_type_name" type="text" name="name" value="Жак-Ив Кусто" autocomplete="off" id="edit-popup-name-input" minlength="2" maxlength="40" required>
+            <span class="popup__input-error edit-popup-name-input-error"></span>
+          </label>
+          <label class="popup__field">
+            <input class="popup__input popup__input_type_description" type="text" name="description" value="Исследователь океана, фотограф, режиссёр" autocomplete="off" id="edit-popup-description-input"  minlength="2" maxlength="200" required>
+            <span class="popup__input-error edit-popup-description-input-error"></span>
+          </label>
           <button class="popup__save-button" type="submit">Сохранить</button>
         </form>
         <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
       </div>
     </div>
 
-    <div class="popup popup_add">
+    <div class="popup popup_type_add">
       <div class="popup__container">
         <h2 class="popup__header">Новое место</h2>
-        <form name="popup-form">
-          <input class="popup__input popup__input_type_name" type="text" name="name" placeholder="Название" autocomplete="off">
-          <input class="popup__input popup__input_type_link" type="text" name="link" placeholder="Ссылка на картинку" autocomplete="off">
+        <form class="popup__form" name="addPopupForm">
+          <label class="popup__field">
+            <input class="popup__input popup__input_type_name" type="text" name="name" placeholder="Название" autocomplete="off" id="add-popup-name-input" minlength="2" maxlength="30" required>
+            <span class="popup__input-error add-popup-name-input-error"></span>
+          </label>
+          <label class="popup__field">
+            <input class="popup__input popup__input_type_link" type="url" name="link" placeholder="Ссылка на картинку" autocomplete="off" id="add-popup-link-input" required>
+            <span class="popup__input-error add-popup-link-input-error"></span>
+          </label>
           <button class="popup__save-button" type="submit">Создать</button>
         </form>
         <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
       </div>
     </div>
 
-    <div class="popup popup_element">
-      <div class="popup__container popup__container_element">
+    <div class="popup popup_type_element">
+      <div class="popup__container popup__container_type_element">
         <figure class="popup__element-figure">
           <img class="popup__element-image" src="https://images.unsplash.com/photo-1530362502708-d02c8f093039?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="">
           <figcaption class="popup__element-caption"></figcaption>
@@ -81,6 +93,7 @@
   </template>
 
   <script src="./scripts/initial-elements.js"></script>
+  <script src="./scripts/validate.js"></script>
   <script src="./scripts/index.js"></script>
 </body>
 </html>

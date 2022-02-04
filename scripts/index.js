@@ -3,16 +3,16 @@ const page = document.querySelector('.page');
 const elementsList = page.querySelector('.elements__list');
 const elementTemplate = document.querySelector('#element-template').content;
 
-const editPopup = page.querySelector('.popup_edit');
-const editPopupForm = editPopup.querySelector('.popup__container');
-const editPopupNameInput = editPopup.querySelector('.popup__input_type_name');
-const editPopupDescriptionInput = editPopup.querySelector('.popup__input_type_description');
+const editPopup = page.querySelector('.popup_type_edit');
+const editPopupForm = document.forms.editPopupForm;
+const editPopupNameInput = editPopupForm.elements.name;
+const editPopupDescriptionInput = editPopupForm.elements.description;
 const editPopupCloseButton = editPopup.querySelector('.popup__close-button');
 
-const addPopup = page.querySelector('.popup_add');
-const addPopupForm = addPopup.querySelector('.popup__container');
-const addPopupNameInput = addPopup.querySelector('.popup__input_type_name');
-const addPopupLinkInput = addPopup.querySelector('.popup__input_type_link');
+const addPopup = page.querySelector('.popup_type_add');
+const addPopupForm = document.forms.addPopupForm;
+const addPopupNameInput = addPopupForm.elements.name;
+const addPopupLinkInput = addPopupForm.elements.link;
 const addPopupCloseButton = addPopup.querySelector('.popup__close-button');
 
 const profileName = page.querySelector('.profile__name');
@@ -20,13 +20,39 @@ const profileDesctiption = page.querySelector('.profile__description');
 const profileEditButton = page.querySelector('.profile__edit-button');
 const profileAddButton = page.querySelector('.profile__add-button');
 
-const elementPopup = page.querySelector('.popup_element');
+const elementPopup = page.querySelector('.popup_type_element');
 const elementPopupImage = elementPopup.querySelector('.popup__element-image');
 const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
 const elementPopupCloseButton = elementPopup.querySelector('.popup__close-button');
 
+function handleEscPopupClosing(evt) {
+  const openedPopup = page.querySelector('.popup_opened');
+  if (evt.key === 'Escape' && openedPopup) {
+    switchPopup(openedPopup);
+  }
+}
+
+function setEscPopupClosingEventListener() {
+  window.addEventListener('keydown', handleEscPopupClosing);
+}
+
+function removeEscPopupClosingEventListener() {
+  window.removeEventListener('keydown', handleEscPopupClosing);
+}
+
 function switchPopup(popup) {
+  // Установка и удаление обработчика закрытия всплывающего окна через Esc
+  (!popup.classList.contains('popup_opened')) ? setEscPopupClosingEventListener() : removeEscPopupClosingEventListener();
+  // Переключение всплывающего окна
   popup.classList.toggle('popup_opened');
+  // Скрытие ошибок полей ввода при закрытии всплывающего окна
+  const formElement = popup.querySelector('.popup__form');
+  if (formElement) {
+    const inputElements = Array.from(formElement.querySelectorAll('.popup__input'));
+    inputElements.forEach(inputElement => {
+      hideInputError(formElement, inputElement, settingObject);
+    });
+  }
 }
 
 function switchEditPopup() {
@@ -105,6 +131,21 @@ function submitAddPopupForm(evt) {
   addElement(element);
   switchAddPopup();
 }
+
+function handleOverlayPopupClosing(evt) {
+  if (evt.target.classList.contains('popup')) {
+    switchPopup(evt.target);
+  }
+}
+
+function setOverlayPopupClosingEventListener() {
+  const popups = Array.from(page.querySelectorAll('.popup'));
+  popups.forEach(popup => {
+    popup.addEventListener('click', handleOverlayPopupClosing);
+  })
+}
+
+setOverlayPopupClosingEventListener();
 
 // Массив из файла initial-elements.js
 initialElements.forEach( item => {

@@ -1,5 +1,5 @@
 .popup__container {
-  max-width: 430px;
+  width: 430px;
   /* Позиционирование */
   margin: 0;
   padding: 34px 36px 37px;
@@ -16,6 +16,7 @@
   /* Фон */
   background-color: #fff;
   border-radius: 10px;
+  cursor: auto;
 }
 
 @media screen and (max-width: 550px) {

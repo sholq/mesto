@@ -20,4 +20,5 @@
   -webkit-transition: visibility 0.5s, opacity 0.5s ease-in-out;
        -o-transition: visibility 0.5s, opacity 0.5s ease-in-out;
           transition: visibility 0.5s, opacity 0.5s ease-in-out;
+  cursor: pointer;
 }
