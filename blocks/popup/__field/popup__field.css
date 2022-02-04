@@ -1,0 +1,14 @@
+.popup__field {
+  margin-top: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.popup__field:first-of-type {
+  margin-top: 0;
+}

@@ -3,14 +3,14 @@ const page = document.querySelector('.page');
 const elementsList = page.querySelector('.elements__list');
 const elementTemplate = document.querySelector('#element-template').content;
 
-const editPopup = page.querySelector('.popup_edit');
-const editPopupForm = editPopup.querySelector('.popup__container');
+const editPopup = page.querySelector('.popup_type_edit');
+const editPopupForm = editPopup.querySelector('.popup__form');
 const editPopupNameInput = editPopup.querySelector('.popup__input_type_name');
 const editPopupDescriptionInput = editPopup.querySelector('.popup__input_type_description');
 const editPopupCloseButton = editPopup.querySelector('.popup__close-button');
 
-const addPopup = page.querySelector('.popup_add');
-const addPopupForm = addPopup.querySelector('.popup__container');
+const addPopup = page.querySelector('.popup_type_add');
+const addPopupForm = addPopup.querySelector('.popup__form');
 const addPopupNameInput = addPopup.querySelector('.popup__input_type_name');
 const addPopupLinkInput = addPopup.querySelector('.popup__input_type_link');
 const addPopupCloseButton = addPopup.querySelector('.popup__close-button');
@@ -20,7 +20,7 @@ const profileDesctiption = page.querySelector('.profile__description');
 const profileEditButton = page.querySelector('.profile__edit-button');
 const profileAddButton = page.querySelector('.profile__add-button');
 
-const elementPopup = page.querySelector('.popup_element');
+const elementPopup = page.querySelector('.popup_type_element');
 const elementPopupImage = elementPopup.querySelector('.popup__element-image');
 const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
 const elementPopupCloseButton = elementPopup.querySelector('.popup__close-button');
