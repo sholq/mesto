@@ -113,7 +113,11 @@ function closePopup() {
   if (formElement) {
     const inputElements = Array.from(formElement.querySelectorAll('.popup__input'));
     inputElements.forEach(inputElement => {
-      hideInputError(formElement, inputElement, settingObject);
+      // hideInputError(formElement, inputElement, settingObject);
+      const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+      inputElement.classList.remove(settingObject.invalidInputClass);
+      errorElement.classList.remove(settingObject.activeErrorClass);
+      errorElement.textContent = '';
     });
   }
 }
