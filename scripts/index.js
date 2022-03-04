@@ -34,7 +34,7 @@ function addElement(element) {
 
 function initiateElements(elements) {
   elements.forEach(item => {
-    const element = new Card(item, '#element-template');
+    const element = new Card(item.name, item.link, '#element-template');
     addElement(element.createElement());
   })
 }
@@ -115,8 +115,11 @@ function submitEditPopupForm(evt) {
 
 function submitAddPopupForm(evt) {
   evt.preventDefault();
-  const element = new Card(addPopupNameInput.value, addPopupLinkInput.value);
-  addElement(element.createElement());
+  const element = new Card(addPopupNameInput.value, addPopupLinkInput.value, '#element-template');
+  const newElement = element.createElement();
+  const newImage = newElement.querySelector('.element__image');
+  newImage.addEventListener('click', openElementPopup);
+  addElement(newElement);
   closePopup();
 }
 

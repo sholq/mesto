@@ -1,8 +1,8 @@
 export default class Card {
-  constructor(card, selector) {
+  constructor(name, link, selector) {
     this._template = document.querySelector(selector).content;
-    this._name = card.name;
-    this._link = card.link;
+    this._name = name;
+    this._link = link;
   }
 
   createElement() {
@@ -15,11 +15,9 @@ export default class Card {
   _renderElement(element) {
     const elementImage = element.querySelector('.element__image');
     const elementCaption = element.querySelector('.element__caption');
-    const elementImageLink = this._link;
-    const elementName = this._name;
-    elementImage.src = elementImageLink;
-    elementImage.alt = elementName;
-    elementCaption.textContent = elementName;
+    elementImage.src = this._link;
+    elementImage.alt = this._name;
+    elementCaption.textContent = this._name;
   }
 
   _addEventListeners(element) {
