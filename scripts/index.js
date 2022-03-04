@@ -24,9 +24,7 @@ const profileDescription = page.querySelector('.profile__description');
 const profileEditButton = page.querySelector('.profile__edit-button');
 const profileAddButton = page.querySelector('.profile__add-button');
 
-const elementPopup = page.querySelector('.popup_type_element');
-const elementPopupImage = elementPopup.querySelector('.popup__element-image');
-const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
+export const elementPopup = page.querySelector('.popup_type_element');
 
 function addElement(element) {
   elementsList.prepend(element);
@@ -49,7 +47,7 @@ function setFormValidation() {
 
 // Обработчики всплывающего элемента
 
-function openPopup(popup) {
+export function openPopup(popup) {
   document.addEventListener('keydown', handleEscPopupClosing);
   popup.classList.add('popup_opened');
 }
@@ -64,16 +62,6 @@ function openAddPopup() {
   addPopupNameInput.value = '';
   addPopupLinkInput.value = '';
   openPopup(addPopup);
-}
-
-function openElementPopup(evt) {
-  const image = evt.target;
-  const elementImageLink = image.src;
-  const elementImageName = image.alt;
-  elementPopupImage.src = elementImageLink;
-  elementPopupImage.alt = elementImageName;
-  elementPopupCaption.textContent = elementImageName;
-  openPopup(elementPopup);
 }
 
 function closePopup() {
@@ -116,10 +104,7 @@ function submitEditPopupForm(evt) {
 function submitAddPopupForm(evt) {
   evt.preventDefault();
   const element = new Card(addPopupNameInput.value, addPopupLinkInput.value, '#element-template');
-  const newElement = element.createElement();
-  const newImage = newElement.querySelector('.element__image');
-  newImage.addEventListener('click', openElementPopup);
-  addElement(newElement);
+  addElement(element.createElement());
   closePopup();
 }
 
@@ -139,13 +124,6 @@ function setOverlayPopupClosingEventListener() {
   })
 }
 
-function setCardImageEventListener() {
-  const images = Array.from(page.querySelectorAll('.element__image'));
-  images.forEach(image => {
-    image.addEventListener('click', openElementPopup)
-  });
-}
-
 // Инициализация элементов и установка валидации форм
 
 initiateElements(initialElements);
@@ -155,7 +133,6 @@ setFormValidation();
 
 setCloseButtonsEventListener();
 setOverlayPopupClosingEventListener();
-setCardImageEventListener();
 
 profileEditButton.addEventListener('click', openEditPopup);
 profileAddButton.addEventListener('click', openAddPopup);

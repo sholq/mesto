@@ -1,3 +1,5 @@
+import {openPopup, elementPopup} from "./index.js"
+
 export default class Card {
   constructor(name, link, selector) {
     this._template = document.querySelector(selector).content;
@@ -23,8 +25,20 @@ export default class Card {
   _addEventListeners(element) {
     const elementLikeButton = element.querySelector('.element__like');
     const elementDeleteButton = element.querySelector('.element__delete');
+    const elementImage = element.querySelector('.element__image');
     elementLikeButton.addEventListener('click', this._toggleLikeButton);
     elementDeleteButton.addEventListener('click', this._removeElement);
+    elementImage.addEventListener('click', this._openElementPopup);
+  }
+
+  _openElementPopup(evt) {
+    const image = evt.target;
+    const elementPopupImage = elementPopup.querySelector('.popup__element-image');
+    const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
+    elementPopupImage.src = image.src;
+    elementPopupImage.alt = image.alt;
+    elementPopupCaption.textContent = image.alt;
+    openPopup(elementPopup);
   }
 
   _removeElement(evt) {
