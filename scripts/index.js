@@ -1,5 +1,10 @@
 "use strict";
 
+import {initialElements} from "./initial-elements.js";
+import Card from "./card.js"
+import FormValidator from "./validate.js";
+import {settingObject} from "./setting-object.js";
+
 const page = document.querySelector('.page');
 
 const elementsList = page.querySelector('.elements__list');
@@ -23,103 +28,30 @@ const elementPopup = page.querySelector('.popup_type_element');
 const elementPopupImage = elementPopup.querySelector('.popup__element-image');
 const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
 
-class Card {
-  constructor(obj, selector) {
-    this.template = document.querySelector(selector).content;
-    this.name = obj.name;
-    this.link = obj.link;
-  }
-
-  openElementPopup(evt) {
-    const image = evt.target;
-    const elementImageLink = image.src;
-    const elementImageName = image.alt;
-    elementPopupImage.src = elementImageLink;
-    elementPopupImage.alt = elementImageName;
-    elementPopupCaption.textContent = elementImageName;
-    openPopup(elementPopup);
-  }
-
-  removeElement(evt) {
-    const element = evt.target.closest('.element');
-    element.remove();
-  }
-
-  toggleLikeButton(evt) {
-    evt.target.classList.toggle('element__like_active');
-  }
-
-  createElement() {
-    // Метод возвращает верстку карточки элемента
-    const element = this.template.querySelector('.element').cloneNode(true);
-    const elementImage = element.querySelector('.element__image');
-    const elementCaption = element.querySelector('.element__caption');
-    const elementLikeButton = element.querySelector('.element__like');
-    const elementDeleteButton = element.querySelector('.element__delete');
-    const elementImageLink = this.link;
-    const elementName = this.name;
-    elementImage.src = elementImageLink;
-    elementImage.alt = elementName;
-    elementCaption.textContent = elementName;
-    elementLikeButton.addEventListener('click', this.toggleLikeButton);
-    elementImage.addEventListener('click', this.openElementPopup);
-    elementDeleteButton.addEventListener('click', this.removeElement);
-
-    return element;
-  }
-}
-
 function addElement(element) {
-  // Функция добавляет верстку карточки на страницу
   elementsList.prepend(element);
 }
 
-initialElements.forEach(item => {
-  const element = new Card(item, '#element-template');
-  addElement(element.createElement());
-})
-
-
-
-function handleEscPopupClosing(evt) {
-  if (evt.key === 'Escape') {
-    closePopup();
-  }
+function initiateElements(elements) {
+  elements.forEach(item => {
+    const element = new Card(item, '#element-template');
+    addElement(element.createElement());
+  })
 }
 
-function setEscPopupClosingEventListener() {
-  document.addEventListener('keydown', handleEscPopupClosing);
+function setFormValidation() {
+  const forms = Array.from(document.querySelectorAll(settingObject.formSelector));
+  forms.forEach(item => {
+    const form = new FormValidator(settingObject, item);
+    form.enableValidation();
+  });
 }
 
-function removeEscPopupClosingEventListener() {
-  document.removeEventListener('keydown', handleEscPopupClosing);
-}
+// Обработчики всплывающего элемента
 
 function openPopup(popup) {
-  // Установка обработчика закрытия всплывающего окна через Esc
-  setEscPopupClosingEventListener();
-  // Открытие всплывающего окна
+  document.addEventListener('keydown', handleEscPopupClosing);
   popup.classList.add('popup_opened');
-}
-
-function closePopup() {
-  const popup = page.querySelector('.popup_opened');
-  // Удаление обработчика закрытия всплывающего окна через Esc
-  removeEscPopupClosingEventListener();
-  // Закрытие всплывающего окна
-  popup.classList.remove('popup_opened');
-  // Скрытие ошибок полей ввода при закрытии всплывающего окна
-  const formElement = popup.querySelector('.popup__form');
-  if (formElement) {
-    const inputElements = Array.from(formElement.querySelectorAll('.popup__input'));
-    inputElements.forEach(inputElement => {
-      // hideInputError(formElement, inputElement, settingObject);
-      const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-      inputElement.classList.remove(settingObject.invalidInputClass);
-      errorElement.classList.remove(settingObject.activeErrorClass);
-      errorElement.textContent = '';
-    });
-  }
 }
 
 function openEditPopup() {
@@ -133,6 +65,46 @@ function openAddPopup() {
   addPopupLinkInput.value = '';
   openPopup(addPopup);
 }
+
+function openElementPopup(evt) {
+  const image = evt.target;
+  const elementImageLink = image.src;
+  const elementImageName = image.alt;
+  elementPopupImage.src = elementImageLink;
+  elementPopupImage.alt = elementImageName;
+  elementPopupCaption.textContent = elementImageName;
+  openPopup(elementPopup);
+}
+
+function closePopup() {
+  const popup = page.querySelector('.popup_opened');
+  document.removeEventListener('keydown', handleEscPopupClosing);
+  popup.classList.remove('popup_opened');
+  const formElement = popup.querySelector('.popup__form');
+  if (formElement) {
+    const inputElements = Array.from(formElement.querySelectorAll('.popup__input'));
+    inputElements.forEach(inputElement => {
+      const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+      inputElement.classList.remove(settingObject.invalidInputClass);
+      errorElement.classList.remove(settingObject.activeErrorClass);
+      errorElement.textContent = '';
+    });
+  }
+}
+
+function handleEscPopupClosing(evt) {
+  if (evt.key === 'Escape') {
+    closePopup();
+  }
+}
+
+function handleOverlayPopupClosing(evt) {
+  if (evt.target.classList.contains('popup')) {
+    closePopup();
+  }
+}
+
+// Обработчики форм
 
 function submitEditPopupForm(evt) {
   evt.preventDefault();
@@ -148,14 +120,10 @@ function submitAddPopupForm(evt) {
   closePopup();
 }
 
-function handleOverlayPopupClosing(evt) {
-  if (evt.target.classList.contains('popup')) {
-    closePopup();
-  }
-}
+// Функции установки слушателей
 
 function setCloseButtonsEventListener() {
-  const closeButtons = page.querySelectorAll('.popup__close-button');
+  const closeButtons = Array.from(page.querySelectorAll('.popup__close-button'));
   closeButtons.forEach((closeButton) => {
     closeButton.addEventListener('click', closePopup)
   });
@@ -168,8 +136,23 @@ function setOverlayPopupClosingEventListener() {
   })
 }
 
+function setCardImageEventListener() {
+  const images = Array.from(page.querySelectorAll('.element__image'));
+  images.forEach(image => {
+    image.addEventListener('click', openElementPopup)
+  });
+}
+
+// Инициализация элементов и установка валидации форм
+
+initiateElements(initialElements);
+setFormValidation();
+
+// Установка слушателей
+
 setCloseButtonsEventListener();
 setOverlayPopupClosingEventListener();
+setCardImageEventListener();
 
 profileEditButton.addEventListener('click', openEditPopup);
 profileAddButton.addEventListener('click', openAddPopup);
