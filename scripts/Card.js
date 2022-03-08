@@ -1,17 +1,18 @@
-import {openPopup, elementPopup} from "./index.js"
+import {openPopup, elementPopup, elementPopupImage, elementPopupCaption} from "./index.js"
 
 export default class Card {
   constructor(name, link, selector) {
-    this._template = document.querySelector(selector).content;
     this._name = name;
     this._link = link;
+    this._selector = selector;
   }
 
   createElement() {
-    const element = this._template.querySelector('.element').cloneNode(true);
-    this._renderElement(element);
-    this._addEventListeners(element);
-    return element;
+    const template = document.querySelector(this._selector).content;
+    this._element = template.querySelector('.element').cloneNode(true);
+    this._renderElement(this._element);
+    this._addEventListeners(this._element);
+    return this._element;
   }
 
   _renderElement(element) {
@@ -27,23 +28,21 @@ export default class Card {
     const elementDeleteButton = element.querySelector('.element__delete');
     const elementImage = element.querySelector('.element__image');
     elementLikeButton.addEventListener('click', this._toggleLikeButton);
-    elementDeleteButton.addEventListener('click', this._removeElement);
+    elementDeleteButton.addEventListener('click', () => {this._removeElement()});
     elementImage.addEventListener('click', this._openElementPopup);
   }
 
   _openElementPopup(evt) {
     const image = evt.target;
-    const elementPopupImage = elementPopup.querySelector('.popup__element-image');
-    const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
     elementPopupImage.src = image.src;
     elementPopupImage.alt = image.alt;
     elementPopupCaption.textContent = image.alt;
     openPopup(elementPopup);
   }
 
-  _removeElement(evt) {
-    const element = evt.target.closest('.element');
-    element.remove();
+  _removeElement() {
+    this._element.remove();
+    this._element = null;
   }
 
   _toggleLikeButton(evt) {

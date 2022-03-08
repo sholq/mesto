@@ -1,8 +1,8 @@
 "use strict";
 
 import {initialElements} from "./initial-elements.js";
-import Card from "./card.js"
-import FormValidator from "./validate.js";
+import Card from "./Card.js"
+import FormValidator from "./FormValidator.js";
 import {settingObject} from "./setting-object.js";
 
 const page = document.querySelector('.page');
@@ -25,24 +25,21 @@ const profileEditButton = page.querySelector('.profile__edit-button');
 const profileAddButton = page.querySelector('.profile__add-button');
 
 export const elementPopup = page.querySelector('.popup_type_element');
+export const elementPopupImage = elementPopup.querySelector('.popup__element-image');
+export const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
 
 function addElement(element) {
   elementsList.prepend(element);
 }
 
-function initiateElements(elements) {
-  elements.forEach(item => {
-    const element = new Card(item.name, item.link, '#element-template');
-    addElement(element.createElement());
-  })
+function createNewCard(name, link) {
+  return new Card(name, link, '#element-template');
 }
 
-function setFormValidation() {
-  const forms = Array.from(document.querySelectorAll(settingObject.formSelector));
-  forms.forEach(item => {
-    const form = new FormValidator(settingObject, item);
-    form.enableValidation();
-  });
+function initiateElements(elements) {
+  elements.forEach(item => {
+    addElement(createNewCard(item.name, item.link).createElement());
+  })
 }
 
 // Обработчики всплывающего элемента
@@ -55,12 +52,13 @@ export function openPopup(popup) {
 function openEditPopup() {
   editPopupNameInput.value = profileName.textContent;
   editPopupDescriptionInput.value = profileDescription.textContent;
+  editPopupFormValidator.resetValidation();
   openPopup(editPopup);
 }
 
 function openAddPopup() {
-  addPopupNameInput.value = '';
-  addPopupLinkInput.value = '';
+  addPopupForm.reset();
+  addPopupFormValidator.resetValidation();
   openPopup(addPopup);
 }
 
@@ -68,16 +66,7 @@ function closePopup() {
   const popup = page.querySelector('.popup_opened');
   document.removeEventListener('keydown', handleEscPopupClosing);
   popup.classList.remove('popup_opened');
-  const formElement = popup.querySelector('.popup__form');
-  if (formElement) {
-    const inputElements = Array.from(formElement.querySelectorAll('.popup__input'));
-    inputElements.forEach(inputElement => {
-      const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-      inputElement.classList.remove(settingObject.invalidInputClass);
-      errorElement.classList.remove(settingObject.activeErrorClass);
-      errorElement.textContent = '';
-    });
-  }
+
 }
 
 function handleEscPopupClosing(evt) {
@@ -103,8 +92,7 @@ function submitEditPopupForm(evt) {
 
 function submitAddPopupForm(evt) {
   evt.preventDefault();
-  const element = new Card(addPopupNameInput.value, addPopupLinkInput.value, '#element-template');
-  addElement(element.createElement());
+  addElement(createNewCard(addPopupNameInput.value, addPopupLinkInput.value).createElement());
   closePopup();
 }
 
@@ -127,7 +115,12 @@ function setOverlayPopupClosingEventListener() {
 // Инициализация элементов и установка валидации форм
 
 initiateElements(initialElements);
-setFormValidation();
+
+const editPopupFormValidator = new FormValidator(settingObject, editPopupForm);
+editPopupFormValidator.enableValidation();
+
+const addPopupFormValidator = new FormValidator(settingObject, addPopupForm);
+addPopupFormValidator.enableValidation();
 
 // Установка слушателей
 
