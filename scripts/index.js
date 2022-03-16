@@ -7,8 +7,6 @@ import {settingObject} from "./setting-object.js";
 
 const page = document.querySelector('.page');
 
-const elementsList = page.querySelector('.elements__list');
-
 const editPopup = page.querySelector('.popup_type_edit');
 const editPopupForm = document.forms.editPopupForm;
 const editPopupNameInput = editPopupForm.elements.name;
@@ -27,20 +25,6 @@ const profileAddButton = page.querySelector('.profile__add-button');
 export const elementPopup = page.querySelector('.popup_type_element');
 export const elementPopupImage = elementPopup.querySelector('.popup__element-image');
 export const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
-
-function addElement(element) {
-  elementsList.prepend(element);
-}
-
-function createNewCard(name, link) {
-  return new Card(name, link, '#element-template');
-}
-
-function initiateElements(elements) {
-  elements.forEach(item => {
-    addElement(createNewCard(item.name, item.link).createElement());
-  })
-}
 
 // Обработчики всплывающего элемента
 
@@ -90,12 +74,6 @@ function submitEditPopupForm(evt) {
   closePopup();
 }
 
-function submitAddPopupForm(evt) {
-  evt.preventDefault();
-  addElement(createNewCard(addPopupNameInput.value, addPopupLinkInput.value).createElement());
-  closePopup();
-}
-
 // Функции установки слушателей
 
 function setCloseButtonsEventListener() {
@@ -114,8 +92,6 @@ function setOverlayPopupClosingEventListener() {
 
 // Инициализация элементов и установка валидации форм
 
-initiateElements(initialElements);
-
 const editPopupFormValidator = new FormValidator(settingObject, editPopupForm);
 editPopupFormValidator.enableValidation();
 
@@ -132,3 +108,41 @@ profileAddButton.addEventListener('click', openAddPopup);
 
 editPopupForm.addEventListener('submit', submitEditPopupForm);
 addPopupForm.addEventListener('submit', submitAddPopupForm);
+
+class Section {
+  constructor({items, renderer}, constainerSelector) {
+    this._items = items;
+    this._renderer = renderer;
+    this._container = document.querySelector(constainerSelector);
+  }
+
+  renderItems() {
+    this._items.forEach(item => {
+      this._renderer(item);
+    })
+  }
+
+  setItem(item) {
+    this._container.prepend(item);
+  }
+}
+
+const elementsListSelector = '.elements__list';
+
+function initeElements(elements) {
+  const initialElementsList = new Section({items: elements, renderer: (item) => {
+    const card = new Card(item.name, item.link, '#element-template');
+    const element = card.createElement();
+    initialElementsList.setItem(element);
+  }}, elementsListSelector);
+
+  initialElementsList.renderItems();
+}
+
+initeElements(initialElements);
+
+function submitAddPopupForm(evt) {
+  evt.preventDefault();
+  initeElements([{name: addPopupNameInput.value, link: addPopupLinkInput.value}]);
+  closePopup();
+}
