@@ -5,109 +5,34 @@ import Card from "./Card.js"
 import FormValidator from "./FormValidator.js";
 import {settingObject} from "./setting-object.js";
 
-const page = document.querySelector('.page');
+// Формы
 
-const editPopup = page.querySelector('.popup_type_edit');
 const editPopupForm = document.forms.editPopupForm;
-const editPopupNameInput = editPopupForm.elements.name;
-const editPopupDescriptionInput = editPopupForm.elements.description;
-
-const addPopup = page.querySelector('.popup_type_add');
 const addPopupForm = document.forms.addPopupForm;
-const addPopupNameInput = addPopupForm.elements.name;
-const addPopupLinkInput = addPopupForm.elements.link;
 
-const profileName = page.querySelector('.profile__name');
-const profileDescription = page.querySelector('.profile__description');
-const profileEditButton = page.querySelector('.profile__edit-button');
-const profileAddButton = page.querySelector('.profile__add-button');
+// Селекторы
 
-export const elementPopup = page.querySelector('.popup_type_element');
-export const elementPopupImage = elementPopup.querySelector('.popup__element-image');
-export const elementPopupCaption = elementPopup.querySelector('.popup__element-caption');
+const elementsListSelector = '.elements__list';
+const profileNameSelector = '.profile__name';
+const profileDescriptionSelector = '.profile__description';
+const addPopupSelector = '.popup_type_add';
+const editPopupSelector = '.popup_type_edit';
+const elementPopupSelector = '.popup_type_element';
 
-// Обработчики всплывающего элемента
+// Элементы
 
-export function openPopup(popup) {
-  document.addEventListener('keydown', handleEscPopupClosing);
-  popup.classList.add('popup_opened');
-}
+const profileEditButton = document.querySelector('.profile__edit-button');
+const profileAddButton = document.querySelector('.profile__add-button');
+const editPopupElement = document.querySelector(editPopupSelector);
+const addPopupElement = document.querySelector(addPopupSelector);
 
-function openEditPopup() {
-  editPopupNameInput.value = profileName.textContent;
-  editPopupDescriptionInput.value = profileDescription.textContent;
-  editPopupFormValidator.resetValidation();
-  openPopup(editPopup);
-}
-
-function openAddPopup() {
-  addPopupForm.reset();
-  addPopupFormValidator.resetValidation();
-  openPopup(addPopup);
-}
-
-function closePopup() {
-  const popup = page.querySelector('.popup_opened');
-  document.removeEventListener('keydown', handleEscPopupClosing);
-  popup.classList.remove('popup_opened');
-
-}
-
-function handleEscPopupClosing(evt) {
-  if (evt.key === 'Escape') {
-    closePopup();
-  }
-}
-
-function handleOverlayPopupClosing(evt) {
-  if (evt.target.classList.contains('popup')) {
-    closePopup();
-  }
-}
-
-// Обработчики форм
-
-function submitEditPopupForm(evt) {
-  evt.preventDefault();
-  profileName.textContent = editPopupNameInput.value;
-  profileDescription.textContent = editPopupDescriptionInput.value;
-  closePopup();
-}
-
-// Функции установки слушателей
-
-function setCloseButtonsEventListener() {
-  const closeButtons = Array.from(page.querySelectorAll('.popup__close-button'));
-  closeButtons.forEach((closeButton) => {
-    closeButton.addEventListener('click', closePopup)
-  });
-}
-
-function setOverlayPopupClosingEventListener() {
-  const popups = Array.from(page.querySelectorAll('.popup'));
-  popups.forEach(popup => {
-    popup.addEventListener('click', handleOverlayPopupClosing);
-  })
-}
-
-// Инициализация элементов и установка валидации форм
+// Установка валидации форм
 
 const editPopupFormValidator = new FormValidator(settingObject, editPopupForm);
 editPopupFormValidator.enableValidation();
 
 const addPopupFormValidator = new FormValidator(settingObject, addPopupForm);
 addPopupFormValidator.enableValidation();
-
-// Установка слушателей
-
-setCloseButtonsEventListener();
-setOverlayPopupClosingEventListener();
-
-profileEditButton.addEventListener('click', openEditPopup);
-profileAddButton.addEventListener('click', openAddPopup);
-
-editPopupForm.addEventListener('submit', submitEditPopupForm);
-addPopupForm.addEventListener('submit', submitAddPopupForm);
 
 class Section {
   constructor({items, renderer}, constainerSelector) {
@@ -127,11 +52,152 @@ class Section {
   }
 }
 
-const elementsListSelector = '.elements__list';
+class Popup {
+  constructor(popupSelector) {
+    this._popup = document.querySelector(popupSelector);
+    this._handleEscCloseReference = this._handleEscClose.bind(this)
+  }
+
+  open() {
+    this._popup.classList.add('popup_opened');
+    const handleReference = this._handleEscCloseReference;
+    document.addEventListener('keydown', handleReference);
+  }
+
+  close() {
+    this._popup.classList.remove('popup_opened');
+    const handleReference = this._handleEscCloseReference;
+    document.removeEventListener('keydown', handleReference);
+  }
+
+  _handleEscClose(evt) {
+    if (evt.key === 'Escape') {
+      this.close();
+    }
+  }
+
+  _handleOverlayPopupClosing(evt) {
+    if (evt.target.classList.contains('popup')) {
+      this.close();
+    }
+  }
+
+  setEventListeners() {
+    const closeButton = this._popup.querySelector('.popup__close-button');
+    closeButton.addEventListener('click', () => {
+      this.close();
+    });
+    this._popup.addEventListener('click', (evt) => {
+      this._handleOverlayPopupClosing(evt);
+    });
+  }
+}
+
+class PopupWithImage extends Popup {
+  constructor(popupSelector) {
+    super(popupSelector);
+    this._image = this._popup.querySelector('.popup__element-image');
+    this._caption = this._popup.querySelector('.popup__element-caption');
+  }
+
+  open(evt) {
+    const image = evt.target;
+    this._image.src = image.src;
+    this._image.alt = image.alt;
+    this._caption.textContent = image.alt;
+    super.open();
+  }
+}
+
+class PopupWithForm extends Popup {
+  constructor(popupSelector, submiter) {
+    super(popupSelector);
+    this._submiter = submiter;
+    this._form = this._popup.querySelector('.popup__form');
+  }
+
+  _getInputValues() {
+    this._inputList = this._form.querySelectorAll('.popup__input');
+
+    this._formValues = {};
+    this._inputList.forEach(input => {
+      this._formValues[input.name] = input.value;
+    });
+
+    return this._formValues;
+  };
+
+  setEventListeners() {
+    super.setEventListeners();
+    this._form.addEventListener('submit', (evt) =>{
+      this._submiter(evt);
+    });
+  }
+
+  close() {
+    super.close();
+    setTimeout(() => {
+      this._form.reset();
+    }, 501)
+  }
+}
+
+class UserInfo {
+  constructor(nameSelector, descriptionSelector) {
+    this._name = document.querySelector(nameSelector);
+    this._description = document.querySelector(descriptionSelector);
+  }
+
+  getUserInfo() {
+    return {
+      name: this._name.textContent,
+      description: this._description.textContent
+    }
+  }
+
+  setUserInfo({name, description}) {
+    this._name.textContent = name;
+    this._description.textContent = description;
+  }
+}
+
+const userInfo = new UserInfo(profileNameSelector, profileDescriptionSelector);
+
+const elementPopup = new PopupWithImage(elementPopupSelector);
+
+const editPopup = new PopupWithForm(editPopupSelector, (evt) => {
+  evt.preventDefault();
+  const inputValues = editPopup._getInputValues();
+  userInfo.setUserInfo(inputValues);
+  editPopup.close();
+});
+
+const addPopup = new PopupWithForm(addPopupSelector, (evt) => {
+  evt.preventDefault();
+  const inputValues = addPopup._getInputValues();
+  initeElements([inputValues]);
+  addPopup.close();
+});
+
+elementPopup.setEventListeners();
+editPopup.setEventListeners();
+addPopup.setEventListeners();
+
+profileEditButton.addEventListener('click', () => {
+  const info = userInfo.getUserInfo();
+  editPopupFormValidator.resetValidation();
+  editPopupElement.querySelector('.popup__input_type_name').value = info.name;
+  editPopupElement.querySelector('.popup__input_type_description').value = info.description;
+  editPopup.open();
+});
+profileAddButton.addEventListener('click', () => {
+  addPopupFormValidator.resetValidation();
+  addPopup.open();
+});
 
 function initeElements(elements) {
   const initialElementsList = new Section({items: elements, renderer: (item) => {
-    const card = new Card(item.name, item.link, '#element-template');
+    const card = new Card(item.name, item.link, '#element-template', (evt) => {elementPopup.open(evt)});
     const element = card.createElement();
     initialElementsList.setItem(element);
   }}, elementsListSelector);
@@ -140,9 +206,3 @@ function initeElements(elements) {
 }
 
 initeElements(initialElements);
-
-function submitAddPopupForm(evt) {
-  evt.preventDefault();
-  initeElements([{name: addPopupNameInput.value, link: addPopupLinkInput.value}]);
-  closePopup();
-}
