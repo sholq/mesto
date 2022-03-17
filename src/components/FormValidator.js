@@ -17,10 +17,7 @@ export default class FormValidator {
 
   resetValidation() {
     this._inputs.forEach(inputElement => {
-      const errorElement = this._form.querySelector(`.${inputElement.id}-error`);
-      inputElement.classList.remove(this._invalidInputClass);
-      errorElement.classList.remove(this._activeErrorClass);
-      errorElement.textContent = '';
+      this._hideInputError(inputElement);
     });
     this._toggleButtonState();
   }
@@ -31,10 +28,6 @@ export default class FormValidator {
       inputElement.addEventListener('input', () => {
         this._checkInputValidity(inputElement);
         this._toggleButtonState();
-      });
-      inputElement.addEventListener('invalid', (evt) => {
-        evt.preventDefault();
-        this._checkInputValidity(inputElement);
       });
     });
   }

@@ -7,6 +7,8 @@ export const settingObject = {
   addPopupSelector: '.popup_type_add',
   editPopupSelector: '.popup_type_edit',
   elementPopupSelector: '.popup_type_element',
+  editPopupNameInputSelector: '.popup__input_type_name',
+  editPopupDescriptionInputSelector: '.popup__input_type_description',
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__save-button',

@@ -5,7 +5,7 @@ import './index.css';
 import {initialElements} from "../utils/initial-elements.js";
 import {settingObject} from "../utils/setting-object.js";
 
-const {elementsListSelector, profileEditButtonSelector, profileAddButtonSelector, editPopupSelector, addPopupSelector, elementPopupSelector} = settingObject;
+const {elementsListSelector, profileEditButtonSelector, profileAddButtonSelector, editPopupSelector, addPopupSelector, elementPopupSelector, editPopupNameInputSelector, editPopupDescriptionInputSelector} = settingObject;
 
 import Card from "../components/Card.js"
 import FormValidator from "../components/FormValidator.js";
@@ -24,6 +24,19 @@ const addPopupForm = document.forms.addPopupForm;
 const profileEditButton = document.querySelector(profileEditButtonSelector);
 const profileAddButton = document.querySelector(profileAddButtonSelector);
 const editPopupElement = document.querySelector(editPopupSelector);
+const editPopupNameInput = editPopupElement.querySelector(editPopupNameInputSelector);
+const editPopupDescriptionInput = editPopupElement.querySelector(editPopupDescriptionInputSelector);
+
+
+// Инициализация элементов
+
+const initialElementsList = new Section({items: initialElements, renderer: (item) => {
+  const card = new Card(item.name, item.link, '#element-template', (evt) => {elementPopup.open(evt)});
+  const element = card.createElement();
+  return element;
+}}, elementsListSelector);
+
+initialElementsList.renderItems();
 
 // Создание экземпляров классов
 
@@ -35,19 +48,17 @@ addPopupFormValidator.enableValidation();
 
 const userInfo = new UserInfo(settingObject);
 
-const elementPopup = new PopupWithImage(elementPopupSelector);
-
-const editPopup = new PopupWithForm(editPopupSelector, (evt) => {
+const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  const inputValues = editPopup._getInputValues();
   userInfo.setUserInfo(inputValues);
   editPopup.close();
 });
 
-const addPopup = new PopupWithForm(addPopupSelector, (evt) => {
+const elementPopup = new PopupWithImage(elementPopupSelector);
+
+const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  const inputValues = addPopup._getInputValues();
-  initeElements([inputValues]);
+  initialElementsList.setItem(inputValues);
   addPopup.close();
 });
 
@@ -60,25 +71,11 @@ addPopup.setEventListeners();
 profileEditButton.addEventListener('click', () => {
   const info = userInfo.getUserInfo();
   editPopupFormValidator.resetValidation();
-  editPopupElement.querySelector('.popup__input_type_name').value = info.name;
-  editPopupElement.querySelector('.popup__input_type_description').value = info.description;
+  editPopupNameInput.value = info.name;
+  editPopupDescriptionInput.value = info.description;
   editPopup.open();
 });
 profileAddButton.addEventListener('click', () => {
   addPopupFormValidator.resetValidation();
   addPopup.open();
 });
-
-// Инициализация элементов
-
-function initeElements(elements) {
-  const initialElementsList = new Section({items: elements, renderer: (item) => {
-    const card = new Card(item.name, item.link, '#element-template', (evt) => {elementPopup.open(evt)});
-    const element = card.createElement();
-    initialElementsList.setItem(element);
-  }}, elementsListSelector);
-
-  initialElementsList.renderItems();
-}
-
-initeElements(initialElements);
