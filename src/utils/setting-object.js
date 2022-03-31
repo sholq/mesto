@@ -1,5 +1,6 @@
 export const settingObject = {
   elementsListSelector: '.elements__list',
+  profileAvatarSelector: '.profile__avatar',
   profileNameSelector: '.profile__name',
   profileDescriptionSelector: '.profile__description',
   profileEditButtonSelector: '.profile__edit-button',

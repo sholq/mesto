@@ -79,3 +79,13 @@ profileAddButton.addEventListener('click', () => {
   addPopupFormValidator.resetValidation();
   addPopup.open();
 });
+
+fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me', {
+  headers: {
+    authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a'
+  }
+})
+  .then(res => res.json())
+  .then((result) => {
+    userInfo.setUserInfo(result);
+  });
