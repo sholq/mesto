@@ -57,6 +57,14 @@ const userInfo = new UserInfo(settingObject);
 const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
   userInfo.setUserInfo(inputValues);
+  fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me', {
+    method: 'PATCH',
+    headers: {
+      authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(inputValues)
+  });
   editPopup.close();
 });
 
