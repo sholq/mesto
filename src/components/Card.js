@@ -1,12 +1,14 @@
 export default class Card {
-  constructor(name, link, selector, handleCardClick) {
+  constructor({name, link, likes}, selector, handleCardClick) {
     this._name = name;
     this._link = link;
+    this._likes = likes.length;
     const template = document.querySelector(selector).content;
     this._element = template.querySelector('.element').cloneNode(true);
     this._elementImage = this._element.querySelector('.element__image');
     this._elementCaption = this._element.querySelector('.element__caption');
     this._elementLikeButton = this._element.querySelector('.element__like');
+    this._elementLikeCounter = this._element.querySelector('.element__counter');
     this._elementDeleteButton = this._element.querySelector('.element__delete');
     this._elementImage = this._element.querySelector('.element__image');
     this._handleCardClick = handleCardClick;
@@ -22,6 +24,7 @@ export default class Card {
     this._elementImage.src = this._link;
     this._elementImage.alt = this._name;
     this._elementCaption.textContent = this._name;
+    this._elementLikeCounter.textContent = this._likes;
   }
 
   _addEventListeners() {

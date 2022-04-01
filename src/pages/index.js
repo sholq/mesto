@@ -27,7 +27,7 @@ const editPopupNameInput = editPopupElement.querySelector(editPopupNameInputSele
 const editPopupDescriptionInput = editPopupElement.querySelector(editPopupDescriptionInputSelector);
 
 const elementsList = new Section({items: [], renderer: (item) => {
-  const card = new Card(item.name, item.link, '#element-template', (evt) => {elementPopup.open(evt)});
+  const card = new Card(item, '#element-template', (evt) => {elementPopup.open(evt)});
   const element = card.createElement();
   return element;
 }}, elementsListSelector);
