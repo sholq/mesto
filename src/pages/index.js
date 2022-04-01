@@ -9,6 +9,7 @@ const {elementsListSelector, profileEditButtonSelector, profileAddButtonSelector
 import Card from "../components/Card.js"
 import FormValidator from "../components/FormValidator.js";
 import Section from "../components/Section.js";
+import Popup from '../components/Popup';
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
@@ -27,7 +28,7 @@ const editPopupNameInput = editPopupElement.querySelector(editPopupNameInputSele
 const editPopupDescriptionInput = editPopupElement.querySelector(editPopupDescriptionInputSelector);
 
 const elementsList = new Section({items: [], renderer: (item) => {
-  const card = new Card(item, '#element-template', (evt) => {elementPopup.open(evt)});
+  const card = new Card(item, '#element-template', (evt) => {elementPopup.open(evt)}, () => {confirmPopup.open()});
   const element = card.createElement();
   return element;
 }}, elementsListSelector);
@@ -84,11 +85,14 @@ const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
   addPopup.close();
 });
 
+const confirmPopup = new Popup('.popup_type_confirm');
+
 // Установка слушателей событий
 
 elementPopup.setEventListeners();
 editPopup.setEventListeners();
 addPopup.setEventListeners();
+confirmPopup.setEventListeners();
 
 profileEditButton.addEventListener('click', () => {
   const info = userInfo.getUserInfo();

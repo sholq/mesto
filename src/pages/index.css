@@ -50,3 +50,11 @@
   /* Стилизация */
   color: #000;
 }
+
+.popup__header_type_confirm {
+  margin: 0;
+}
+
+.popup__save-button_type_confirm {
+  margin: 32px 0 0;
+}
