@@ -1,8 +1,9 @@
 export default class Card {
-  constructor({name, link, likes, owner, _id}, selector, handleCardClick, handleDeleteClick) {
+  constructor({name, link, likes, owner, _id}, selector, handleCardClick, handleDeleteClick, handleLikeClick) {
     this._name = name;
     this._link = link;
-    this._likes = likes.length;
+    this._likes = likes;
+    this._likesNumber = likes.length;
     this._owner = owner._id;
 
     const template = document.querySelector(selector).content;
@@ -17,6 +18,7 @@ export default class Card {
     this._element.id = _id;
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
+    this._handleLikeClick = handleLikeClick;
   }
 
   createElement() {
@@ -33,7 +35,11 @@ export default class Card {
     this._elementImage.src = this._link;
     this._elementImage.alt = this._name;
     this._elementCaption.textContent = this._name;
-    this._elementLikeCounter.textContent = this._likes;
+    this._elementLikeCounter.textContent = this._likesNumber;
+
+    if (this._likes.find(e => e._id === 'f6c0b5ceb4d9aa888c76e5f3')) {
+      this._toggleLikeButton();
+    }
 
     if (this._owner !== 'f6c0b5ceb4d9aa888c76e5f3') {
       this._elementDeleteButton.style.display = 'none';
@@ -47,7 +53,13 @@ export default class Card {
       }
     });
     this._elementLikeButton.addEventListener('click', (evt) => {
-      this._toggleLikeButton(evt);
+      this._handleLikeClick(evt, this._element.id)
+        .then(res => res.json())
+        .then((res) => {
+          this._likesNumber = res.likes.length;
+          this._elementLikeCounter.textContent = this._likesNumber;
+          this._toggleLikeButton();
+        });
     });
     this._elementImage.addEventListener('click', (evt) => {
       this._handleCardClick(evt);
@@ -59,7 +71,7 @@ export default class Card {
     this._element = null;
   }
 
-  _toggleLikeButton(evt) {
-    evt.target.classList.toggle('element__like_active');
+  _toggleLikeButton() {
+    this._elementLikeButton.classList.toggle('element__like_active');
   }
 }

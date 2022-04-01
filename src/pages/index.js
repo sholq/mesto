@@ -28,7 +28,31 @@ const editPopupNameInput = editPopupElement.querySelector(editPopupNameInputSele
 const editPopupDescriptionInput = editPopupElement.querySelector(editPopupDescriptionInputSelector);
 
 const elementsList = new Section({items: [], renderer: (item) => {
-  const card = new Card(item, elementsTemplateSelector, (evt) => {elementPopup.open(evt)}, (evt, handlerDelete) => {confirmPopup.open(evt, handlerDelete)});
+  const card = new Card(item, elementsTemplateSelector, (evt) => {
+      elementPopup.open(evt)
+    },
+    (evt, handlerDelete) => {
+      confirmPopup.open(evt, handlerDelete)
+    },
+    (evt, cardId) => {
+      if (evt.target.classList.contains('element__like_active')) {
+        return fetch(`https://mesto.nomoreparties.co/v1/cohort-39/cards/${cardId}/likes`, {
+          method: 'DELETE',
+          headers: {
+            authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
+            'Content-Type': 'application/json'
+          }
+        });
+      } else {
+        return fetch(`https://mesto.nomoreparties.co/v1/cohort-39/cards/${cardId}/likes`, {
+          method: 'PUT',
+          headers: {
+            authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+    });
   const element = card.createElement();
   return element;
 }}, elementsListSelector);
