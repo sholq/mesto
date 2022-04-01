@@ -4,14 +4,14 @@ import './index.css';
 
 import {settingObject} from "../utils/setting-object.js";
 
-const {elementsListSelector, profileEditButtonSelector, profileAddButtonSelector, editPopupSelector, addPopupSelector, elementPopupSelector, editPopupNameInputSelector, editPopupDescriptionInputSelector} = settingObject;
+const {elementsTemplateSelector, elementsListSelector, profileEditButtonSelector, profileAddButtonSelector, editPopupSelector, addPopupSelector, elementPopupSelector, confirmPopupSelector, editPopupNameInputSelector, editPopupDescriptionInputSelector} = settingObject;
 
 import Card from "../components/Card.js"
 import FormValidator from "../components/FormValidator.js";
 import Section from "../components/Section.js";
-import Popup from '../components/Popup';
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupSubmit from '../components/PopupSubmit';
 import UserInfo from "../components/UserInfo.js";
 
 // Формы
@@ -28,7 +28,7 @@ const editPopupNameInput = editPopupElement.querySelector(editPopupNameInputSele
 const editPopupDescriptionInput = editPopupElement.querySelector(editPopupDescriptionInputSelector);
 
 const elementsList = new Section({items: [], renderer: (item) => {
-  const card = new Card(item, '#element-template', (evt) => {elementPopup.open(evt)}, () => {confirmPopup.open()});
+  const card = new Card(item, elementsTemplateSelector, (evt) => {elementPopup.open(evt)}, (evt, handlerDelete) => {confirmPopup.open(evt, handlerDelete)});
   const element = card.createElement();
   return element;
 }}, elementsListSelector);
@@ -73,7 +73,6 @@ const elementPopup = new PopupWithImage(elementPopupSelector);
 
 const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  elementsList.setItem(inputValues);
   fetch('https://mesto.nomoreparties.co/v1/cohort-39/cards', {
     method: 'POST',
     headers: {
@@ -81,11 +80,23 @@ const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(inputValues)
-  });
-  addPopup.close();
+  })
+    .then(res => res.json())
+    .then(card => {
+      elementsList.setItem(card);
+    })
+    .then(() => {addPopup.close()});
 });
 
-const confirmPopup = new Popup('.popup_type_confirm');
+const confirmPopup = new PopupSubmit(confirmPopupSelector, () => {
+  return fetch(`https://mesto.nomoreparties.co/v1/cohort-39/cards/${confirmPopup.currentId}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
+        'Content-Type': 'application/json'
+      }
+  })
+});
 
 // Установка слушателей событий
 

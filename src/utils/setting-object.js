@@ -1,4 +1,5 @@
 export const settingObject = {
+  elementsTemplateSelector: '#element-template',
   elementsListSelector: '.elements__list',
   profileAvatarSelector: '.profile__avatar',
   profileNameSelector: '.profile__name',
@@ -7,6 +8,7 @@ export const settingObject = {
   profileAddButtonSelector: '.profile__add-button',
   addPopupSelector: '.popup_type_add',
   editPopupSelector: '.popup_type_edit',
+  confirmPopupSelector: '.popup_type_confirm',
   elementPopupSelector: '.popup_type_element',
   editPopupNameInputSelector: '.popup__input_type_name',
   editPopupDescriptionInputSelector: '.popup__input_type_description',
