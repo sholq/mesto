@@ -85,7 +85,9 @@ const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
     .then(card => {
       elementsList.setItem(card);
     })
-    .then(() => {addPopup.close()});
+    .then(() => {
+      addPopup.close()
+    });
 });
 
 const confirmPopup = new PopupSubmit(confirmPopupSelector, () => {

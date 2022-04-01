@@ -4,7 +4,6 @@ export default class Card {
     this._link = link;
     this._likes = likes.length;
     this._owner = owner._id;
-    this._element.id = _id;
 
     const template = document.querySelector(selector).content;
     this._element = template.querySelector('.element').cloneNode(true);
@@ -15,6 +14,7 @@ export default class Card {
     this._elementDeleteButton = this._element.querySelector('.element__delete');
     this._elementImage = this._element.querySelector('.element__image');
 
+    this._element.id = _id;
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
   }
@@ -22,9 +22,9 @@ export default class Card {
   createElement() {
     this._renderElement();
     this._addEventListeners();
-    if (this._owner !== 'f6c0b5ceb4d9aa888c76e5f3') {
-      this._element.style.display = 'none';
-    }
+    // if (this._owner !== 'f6c0b5ceb4d9aa888c76e5f3') {
+    //   this._element.style.display = 'none';
+    // }
     return this._element;
 
   }
