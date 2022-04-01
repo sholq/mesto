@@ -73,6 +73,14 @@ const elementPopup = new PopupWithImage(elementPopupSelector);
 const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
   elementsList.setItem(inputValues);
+  fetch('https://mesto.nomoreparties.co/v1/cohort-39/cards', {
+    method: 'POST',
+    headers: {
+      authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(inputValues)
+  });
   addPopup.close();
 });
 
