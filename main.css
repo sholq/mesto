@@ -39,4 +39,4 @@
 .popup__element-figure{margin:0}
 .popup__element-image{display:block;max-height:75vh;max-width:75vw;-o-object-fit:contain;object-fit:contain}
 .popup__element-caption{font-size:12px;line-height:15px;margin:10px 0 0}
-
+.element__counter{color:#000;font-size:13px;font-weight:400;line-height:16px;margin:3px 0 0;text-align:center}.popup__header_type_confirm{margin:0}.popup__save-button_type_confirm{margin:32px 0 0}.profile__edit-wrap{position:relative}.profile__edit-wrap:before{background-image:url(a086f758840ae814ecde.svg);background-position:50%;background-repeat:no-repeat;content:"";display:none;height:100%;position:absolute;width:100%}.profile__edit-wrap:hover:before{background-color:rgba(0,0,0,.8);cursor:pointer;display:block}
