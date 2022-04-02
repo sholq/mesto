@@ -24,9 +24,6 @@ export default class Card {
   createElement() {
     this._renderElement();
     this._addEventListeners();
-    // if (this._owner !== 'f6c0b5ceb4d9aa888c76e5f3') {
-    //   this._element.style.display = 'none';
-    // }
     return this._element;
 
   }

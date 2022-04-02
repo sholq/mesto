@@ -6,6 +6,7 @@ import {settingObject} from "../utils/setting-object.js";
 
 const {elementsTemplateSelector, elementsListSelector, profileEditButtonSelector, profileAddButtonSelector, profileEditAvatarButtonSelector, editPopupSelector, addPopupSelector, editAvatarPopupSelector, elementPopupSelector, confirmPopupSelector, editPopupNameInputSelector, editPopupDescriptionInputSelector} = settingObject;
 
+import Api from "../components/Api";
 import Card from "../components/Card.js"
 import FormValidator from "../components/FormValidator.js";
 import Section from "../components/Section.js";
@@ -29,6 +30,16 @@ const editPopupElement = document.querySelector(editPopupSelector);
 const editPopupNameInput = editPopupElement.querySelector(editPopupNameInputSelector);
 const editPopupDescriptionInput = editPopupElement.querySelector(editPopupDescriptionInputSelector);
 
+// Создание экземпляров классов
+
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-39/',
+  headers: {
+    authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
+    'Content-Type': 'application/json'
+  }
+});
+
 const elementsList = new Section({items: [], renderer: (item) => {
   const card = new Card(item, elementsTemplateSelector, (evt) => {
       elementPopup.open(evt)
@@ -38,40 +49,13 @@ const elementsList = new Section({items: [], renderer: (item) => {
     },
     (evt, cardId) => {
       if (evt.target.classList.contains('element__like_active')) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-39/cards/${cardId}/likes`, {
-          method: 'DELETE',
-          headers: {
-            authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
-            'Content-Type': 'application/json'
-          }
-        });
+        return api.deleteLike(cardId);
       } else {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-39/cards/${cardId}/likes`, {
-          method: 'PUT',
-          headers: {
-            authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
-            'Content-Type': 'application/json'
-          }
-        });
+        return api.putLike(cardId);
       }
     });
-  const element = card.createElement();
-  return element;
+  return card.createElement();
 }}, elementsListSelector);
-
-fetch('https://mesto.nomoreparties.co/v1/cohort-39/cards', {
-  headers: {
-    authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a'
-  }
-})
-  .then(res => res.json())
-  .then((result) => {
-    result.forEach(item => {
-      elementsList.setItem(item)
-    })
-  });
-
-// Создание экземпляров классов
 
 const editPopupFormValidator = new FormValidator(settingObject, editPopupForm);
 editPopupFormValidator.enableValidation();
@@ -86,14 +70,7 @@ const userInfo = new UserInfo(settingObject);
 
 const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  return fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me', {
-    method: 'PATCH',
-    headers: {
-      authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(inputValues)
-  })
+  return api.editUserInfo(inputValues)
     .then(res => res.json())
     .then(user => {
       userInfo.setUserInfo(user)
@@ -107,14 +84,7 @@ const elementPopup = new PopupWithImage(elementPopupSelector);
 
 const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  return fetch('https://mesto.nomoreparties.co/v1/cohort-39/cards', {
-    method: 'POST',
-    headers: {
-      authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(inputValues)
-  })
+  return api.addNewImage(inputValues)
     .then(res => res.json())
     .then(card => {
       elementsList.setItem(card);
@@ -126,14 +96,7 @@ const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
 
 const editAvatarPopup = new PopupWithForm(editAvatarPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  return fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me/avatar', {
-    method: 'PATCH',
-    headers: {
-      authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(inputValues)
-  })
+  return api.editUserAvatar(inputValues)
     .then(res => res.json())
     .then(user => {
       userInfo.setUserInfo(user);
@@ -147,13 +110,7 @@ const editAvatarPopup = new PopupWithForm(editAvatarPopupSelector, (evt, inputVa
 });
 
 const confirmPopup = new PopupSubmit(confirmPopupSelector, () => {
-  return fetch(`https://mesto.nomoreparties.co/v1/cohort-39/cards/${confirmPopup.currentId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
-        'Content-Type': 'application/json'
-      }
-  })
+  return api.deleteCard(confirmPopup.currentId)
 });
 
 // Установка слушателей событий
@@ -180,12 +137,18 @@ profileEditAvatarButton.addEventListener('click', () => {
   editAvatarPopup.open();
 })
 
-fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me', {
-  headers: {
-    authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a'
-  }
-})
+// Инициализация
+
+api.getUserInfo()
   .then(res => res.json())
   .then((result) => {
     userInfo.setUserInfo(result);
+  });
+
+api.getInitialCards()
+  .then(res => res.json())
+  .then((result) => {
+    result.forEach(item => {
+      elementsList.setItem(item)
+    })
   });
