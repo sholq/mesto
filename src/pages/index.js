@@ -86,7 +86,7 @@ const userInfo = new UserInfo(settingObject);
 
 const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me', {
+  return fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me', {
     method: 'PATCH',
     headers: {
       authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
@@ -97,15 +97,17 @@ const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
     .then(res => res.json())
     .then(user => {
       userInfo.setUserInfo(user)
+    })
+    .then(() => {
+      editPopup.close();
     });
-  editPopup.close();
 });
 
 const elementPopup = new PopupWithImage(elementPopupSelector);
 
 const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  fetch('https://mesto.nomoreparties.co/v1/cohort-39/cards', {
+  return fetch('https://mesto.nomoreparties.co/v1/cohort-39/cards', {
     method: 'POST',
     headers: {
       authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
@@ -124,7 +126,7 @@ const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
 
 const editAvatarPopup = new PopupWithForm(editAvatarPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me/avatar', {
+  return fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me/avatar', {
     method: 'PATCH',
     headers: {
       authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
