@@ -4,7 +4,7 @@ import './index.css';
 
 import {settingObject} from "../utils/setting-object.js";
 
-const {elementsTemplateSelector, elementsListSelector, profileEditButtonSelector, profileAddButtonSelector, editPopupSelector, addPopupSelector, elementPopupSelector, confirmPopupSelector, editPopupNameInputSelector, editPopupDescriptionInputSelector} = settingObject;
+const {elementsTemplateSelector, elementsListSelector, profileEditButtonSelector, profileAddButtonSelector, profileEditAvatarButtonSelector, editPopupSelector, addPopupSelector, editAvatarPopupSelector, elementPopupSelector, confirmPopupSelector, editPopupNameInputSelector, editPopupDescriptionInputSelector} = settingObject;
 
 import Card from "../components/Card.js"
 import FormValidator from "../components/FormValidator.js";
@@ -18,9 +18,11 @@ import UserInfo from "../components/UserInfo.js";
 
 const editPopupForm = document.forms.editPopupForm;
 const addPopupForm = document.forms.addPopupForm;
+const editAvatarPopupForm = document.forms.editAvatarPopupForm;
 
 // Элементы
 
+const profileEditAvatarButton = document.querySelector(profileEditAvatarButtonSelector);
 const profileEditButton = document.querySelector(profileEditButtonSelector);
 const profileAddButton = document.querySelector(profileAddButtonSelector);
 const editPopupElement = document.querySelector(editPopupSelector);
@@ -77,11 +79,13 @@ editPopupFormValidator.enableValidation();
 const addPopupFormValidator = new FormValidator(settingObject, addPopupForm);
 addPopupFormValidator.enableValidation();
 
+const editAvatarFormValidator = new FormValidator(settingObject, editAvatarPopupForm);
+editAvatarFormValidator.enableValidation();
+
 const userInfo = new UserInfo(settingObject);
 
 const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
-  userInfo.setUserInfo(inputValues);
   fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me', {
     method: 'PATCH',
     headers: {
@@ -89,7 +93,11 @@ const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(inputValues)
-  });
+  })
+    .then(res => res.json())
+    .then(user => {
+      userInfo.setUserInfo(user)
+    });
   editPopup.close();
 });
 
@@ -114,6 +122,28 @@ const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
     });
 });
 
+const editAvatarPopup = new PopupWithForm(editAvatarPopupSelector, (evt, inputValues) => {
+  evt.preventDefault();
+  fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me/avatar', {
+    method: 'PATCH',
+    headers: {
+      authorization: 'cd6a613e-5d59-4744-9a05-b0afb2ac5a0a',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(inputValues)
+  })
+    .then(res => res.json())
+    .then(user => {
+      userInfo.setUserInfo(user);
+    })
+    .then(() => {
+      return fetch(inputValues.avatar)
+    })
+    .finally(() => {
+      editAvatarPopup.close();
+    });
+});
+
 const confirmPopup = new PopupSubmit(confirmPopupSelector, () => {
   return fetch(`https://mesto.nomoreparties.co/v1/cohort-39/cards/${confirmPopup.currentId}`, {
       method: 'DELETE',
@@ -129,6 +159,7 @@ const confirmPopup = new PopupSubmit(confirmPopupSelector, () => {
 elementPopup.setEventListeners();
 editPopup.setEventListeners();
 addPopup.setEventListeners();
+editAvatarPopup.setEventListeners();
 confirmPopup.setEventListeners();
 
 profileEditButton.addEventListener('click', () => {
@@ -142,6 +173,10 @@ profileAddButton.addEventListener('click', () => {
   addPopupFormValidator.resetValidation();
   addPopup.open();
 });
+profileEditAvatarButton.addEventListener('click', () => {
+  editAvatarFormValidator.resetValidation();
+  editAvatarPopup.open();
+})
 
 fetch('https://mesto.nomoreparties.co/v1/cohort-39/users/me', {
   headers: {
