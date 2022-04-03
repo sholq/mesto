@@ -1,7 +1,7 @@
 .element__container {
   width: 100%;
   /* Позиционирование */
-  padding: 25px 20px;
+  padding: 20px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   display: -ms-grid;

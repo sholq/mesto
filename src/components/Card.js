@@ -1,5 +1,5 @@
 export default class Card {
-  constructor({name, link, likes, owner, _id}, selector, handleCardClick, handleDeleteClick, handleLikeClick) {
+  constructor({name, link, likes, owner, _id}, selector, handleCardClick, handleDeleteClick, handleLikeClick, currentUserId) {
     this._name = name;
     this._link = link;
     this._likes = likes;
@@ -19,6 +19,8 @@ export default class Card {
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
     this._handleLikeClick = handleLikeClick;
+
+    this._currentUserId = currentUserId;
   }
 
   createElement() {
@@ -34,11 +36,11 @@ export default class Card {
     this._elementCaption.textContent = this._name;
     this._elementLikeCounter.textContent = this._likesNumber;
 
-    if (this._likes.find(e => e._id === 'f6c0b5ceb4d9aa888c76e5f3')) {
+    if (this._likes.find(e => e._id === this._currentUserId)) {
       this._toggleLikeButton();
     }
 
-    if (this._owner !== 'f6c0b5ceb4d9aa888c76e5f3') {
+    if (this._owner !== this._currentUserId) {
       this._elementDeleteButton.style.display = 'none';
     }
   }
@@ -49,15 +51,19 @@ export default class Card {
         this._handleDeleteClick(evt, this.removeElement.bind(this));
       }
     });
+
     this._elementLikeButton.addEventListener('click', (evt) => {
       this._handleLikeClick(evt, this._element.id)
-        .then(res => res.json())
         .then((res) => {
           this._likesNumber = res.likes.length;
           this._elementLikeCounter.textContent = this._likesNumber;
           this._toggleLikeButton();
+        })
+        .catch((err) => {
+          console.log(err);
         });
     });
+
     this._elementImage.addEventListener('click', (evt) => {
       this._handleCardClick(evt);
     });

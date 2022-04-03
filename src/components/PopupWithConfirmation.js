@@ -1,6 +1,6 @@
 import Popup from '../components/Popup';
 
-export default class PopupSubmit extends Popup {
+export default class PopupWithConfirmation extends Popup {
   constructor(popupSelector, submiter) {
     super(popupSelector);
     this._saveButton = this._popup.querySelector('.popup__save-button');
@@ -20,6 +20,11 @@ export default class PopupSubmit extends Popup {
       this._submiter()
         .then(() => {
           this._handlerDelete();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
           this.close();
         });
     })

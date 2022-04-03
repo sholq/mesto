@@ -12,7 +12,7 @@ import FormValidator from "../components/FormValidator.js";
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
-import PopupSubmit from '../components/PopupSubmit';
+import PopupWithConfirmation from '../components/PopupWithConfirmation';
 import UserInfo from "../components/UserInfo.js";
 
 // Формы
@@ -40,7 +40,9 @@ const api = new Api({
   }
 });
 
-const elementsList = new Section({items: [], renderer: (item) => {
+// Создадим экземпляр класса с пустым массивом элементов, добавим их на страницу позже
+
+const elementsList = new Section({items: [], renderer: (item, userId) => {
   const card = new Card(item, elementsTemplateSelector, (evt) => {
       elementPopup.open(evt)
     },
@@ -53,7 +55,9 @@ const elementsList = new Section({items: [], renderer: (item) => {
       } else {
         return api.putLike(cardId);
       }
-    });
+    },
+    userId
+  );
   return card.createElement();
 }}, elementsListSelector);
 
@@ -71,11 +75,13 @@ const userInfo = new UserInfo(settingObject);
 const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
   return api.editUserInfo(inputValues)
-    .then(res => res.json())
     .then(user => {
       userInfo.setUserInfo(user)
     })
-    .then(() => {
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
       editPopup.close();
     });
 });
@@ -85,11 +91,13 @@ const elementPopup = new PopupWithImage(elementPopupSelector);
 const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
   return api.addNewImage(inputValues)
-    .then(res => res.json())
     .then(card => {
-      elementsList.setItem(card);
+      elementsList.setItem(card, userId);
     })
-    .then(() => {
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
       addPopup.close()
     });
 });
@@ -97,19 +105,18 @@ const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
 const editAvatarPopup = new PopupWithForm(editAvatarPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
   return api.editUserAvatar(inputValues)
-    .then(res => res.json())
     .then(user => {
       userInfo.setUserInfo(user);
     })
-    .then(() => {
-      return fetch(inputValues.avatar)
+    .catch((err) => {
+      console.log(err);
     })
     .finally(() => {
       editAvatarPopup.close();
     });
 });
 
-const confirmPopup = new PopupSubmit(confirmPopupSelector, () => {
+const confirmPopup = new PopupWithConfirmation(confirmPopupSelector, () => {
   return api.deleteCard(confirmPopup.currentId)
 });
 
@@ -138,17 +145,24 @@ profileEditAvatarButton.addEventListener('click', () => {
 })
 
 // Инициализация
+// Необходимо получить id пользователя и передать в конструктор класса Card
+
+let userId;
 
 api.getUserInfo()
-  .then(res => res.json())
   .then((result) => {
     userInfo.setUserInfo(result);
-  });
-
-api.getInitialCards()
-  .then(res => res.json())
+    userId = result._id;
+    console.log(userId)
+  })
+  .then(() => {
+    return api.getInitialCards();
+  })
   .then((result) => {
     result.forEach(item => {
-      elementsList.setItem(item)
+      elementsList.setItem(item, userId)
     })
+  })
+  .catch((err) => {
+    console.log(err);
   });
