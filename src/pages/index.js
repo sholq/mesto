@@ -153,7 +153,6 @@ api.getUserInfo()
   .then((result) => {
     userInfo.setUserInfo(result);
     userId = result._id;
-    console.log(userId)
   })
   .then(() => {
     return api.getInitialCards();
