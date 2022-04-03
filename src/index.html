@@ -14,7 +14,9 @@
     <main class="main">
       <section class="profile">
         <div class="profile__container">
-          <img class="profile__avatar" src="" alt="">
+          <div class="profile__edit-wrap">
+            <img class="profile__avatar" src="" alt="">
+          </div>
           <div class="profile__info">
             <h1 class="profile__name"></h1>
             <button class="profile__edit-button" type="button" aria-label="Редактировать"></button>
@@ -78,6 +80,28 @@
         <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
       </div>
     </div>
+
+    <div class="popup popup_type_confirm">
+      <div class="popup__container">
+        <h2 class="popup__header popup__header_type_confirm">Вы уверены?</h2>
+        <button class="popup__save-button popup__save-button_type_confirm">Да</button>
+        <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
+      </div>
+    </div>
+
+    <div class="popup popup_type_avatar">
+      <div class="popup__container">
+        <h2 class="popup__header">Обновить аватар</h2>
+        <form class="popup__form" name="editAvatarPopupForm">
+          <label class="popup__field">
+            <input class="popup__input popup__input_type_link" type="url" name="avatar" placeholder="Ссылка на картинку" autocomplete="off" id="edit-avatar-popup-link-input" required>
+            <span class="popup__input-error edit-avatar-popup-link-input-error"></span>
+          </label>
+          <button class="popup__save-button" type="submit">Сохранить</button>
+        </form>
+        <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
+      </div>
+    </div>
   </div>
 
   <template id="element-template">
@@ -85,7 +109,10 @@
       <img class="element__image" src="https://images.unsplash.com/photo-1530362502708-d02c8f093039?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="">
       <div class="element__container">
         <h2 class="element__caption"></h2>
-        <button class="element__like" type="button" aria-label="Лайк"></button>
+        <div>
+          <button class="element__like" type="button" aria-label="Лайк"></button>
+          <p class="element__counter"></p>
+        </div>
       </div>
       <button class="element__delete" type="button" aria-label="Удалить"></button>
     </li>

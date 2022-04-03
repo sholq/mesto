@@ -1,0 +1,10 @@
+.element__counter {
+  margin: 0;
+  /* Параметры текста */
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  /* Стилизация */
+  color: #000;
+}
