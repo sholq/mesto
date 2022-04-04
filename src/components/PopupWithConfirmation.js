@@ -7,10 +7,10 @@ export default class PopupWithConfirmation extends Popup {
     this._submiter = submiter;
   }
 
-  open(evt, handlerDelete) {
+  open(evt, handleDelete) {
     this._card = evt.target.parentElement;
     this.currentId = this._card.id;
-    this._handlerDelete = handlerDelete;
+    this._handleDelete = handleDelete;
     super.open();
   }
 
@@ -19,12 +19,7 @@ export default class PopupWithConfirmation extends Popup {
     this._saveButton.addEventListener('click', () => {
       this._submiter()
         .then(() => {
-          this._handlerDelete();
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
+          this._handleDelete();
           this.close();
         });
     })

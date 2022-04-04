@@ -26,9 +26,6 @@ const editAvatarPopupForm = document.forms.editAvatarPopupForm;
 const profileEditAvatarButton = document.querySelector(profileEditAvatarButtonSelector);
 const profileEditButton = document.querySelector(profileEditButtonSelector);
 const profileAddButton = document.querySelector(profileAddButtonSelector);
-const editPopupElement = document.querySelector(editPopupSelector);
-const editPopupNameInput = editPopupElement.querySelector(editPopupNameInputSelector);
-const editPopupDescriptionInput = editPopupElement.querySelector(editPopupDescriptionInputSelector);
 
 // Создание экземпляров классов
 
@@ -40,26 +37,30 @@ const api = new Api({
   }
 });
 
-// Создадим экземпляр класса с пустым массивом элементов, добавим их на страницу позже
-
-const elementsList = new Section({items: [], renderer: (item, userId) => {
+const elementsList = new Section((item, userId) => {
   const card = new Card(item, elementsTemplateSelector, (evt) => {
       elementPopup.open(evt)
     },
     (evt, handlerDelete) => {
       confirmPopup.open(evt, handlerDelete)
     },
-    (evt, cardId) => {
-      if (evt.target.classList.contains('element__like_active')) {
-        return api.deleteLike(cardId);
+    (cardId) => {
+      if (card.isLiked) {
+        return api.deleteLike(cardId)
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
-        return api.putLike(cardId);
+        return api.putLike(cardId)
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
     userId
   );
   return card.createElement();
-}}, elementsListSelector);
+}, elementsListSelector);
 
 const editPopupFormValidator = new FormValidator(settingObject, editPopupForm);
 editPopupFormValidator.enableValidation();
@@ -76,13 +77,10 @@ const editPopup = new PopupWithForm(editPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
   return api.editUserInfo(inputValues)
     .then(user => {
-      userInfo.setUserInfo(user)
+      userInfo.setUserInfo(user);
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => {
-      editPopup.close();
     });
 });
 
@@ -92,13 +90,10 @@ const addPopup = new PopupWithForm(addPopupSelector, (evt, inputValues) => {
   evt.preventDefault();
   return api.addNewImage(inputValues)
     .then(card => {
-      elementsList.setItem(card, userId);
+      elementsList.setItem(card, userInfo.id);
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => {
-      addPopup.close()
     });
 });
 
@@ -110,14 +105,14 @@ const editAvatarPopup = new PopupWithForm(editAvatarPopupSelector, (evt, inputVa
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => {
-      editAvatarPopup.close();
     });
 });
 
 const confirmPopup = new PopupWithConfirmation(confirmPopupSelector, () => {
   return api.deleteCard(confirmPopup.currentId)
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 // Установка слушателей событий
@@ -131,8 +126,7 @@ confirmPopup.setEventListeners();
 profileEditButton.addEventListener('click', () => {
   const info = userInfo.getUserInfo();
   editPopupFormValidator.resetValidation();
-  editPopupNameInput.value = info.name;
-  editPopupDescriptionInput.value = info.description;
+  editPopup.setInputValues(info);
   editPopup.open();
 });
 profileAddButton.addEventListener('click', () => {
@@ -145,22 +139,11 @@ profileEditAvatarButton.addEventListener('click', () => {
 })
 
 // Инициализация
-// Необходимо получить id пользователя и передать в конструктор класса Card
 
-let userId;
-
-api.getUserInfo()
-  .then((result) => {
-    userInfo.setUserInfo(result);
-    userId = result._id;
-  })
-  .then(() => {
-    return api.getInitialCards();
-  })
-  .then((result) => {
-    result.forEach(item => {
-      elementsList.setItem(item, userId)
-    })
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cards]) => {
+    userInfo.setUserInfo(userData);
+    elementsList.renderItems(cards, userInfo.id);
   })
   .catch((err) => {
     console.log(err);

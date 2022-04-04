@@ -21,6 +21,7 @@ export default class Card {
     this._handleLikeClick = handleLikeClick;
 
     this._currentUserId = currentUserId;
+    this.isLiked = false;
   }
 
   createElement() {
@@ -52,15 +53,12 @@ export default class Card {
       }
     });
 
-    this._elementLikeButton.addEventListener('click', (evt) => {
-      this._handleLikeClick(evt, this._element.id)
+    this._elementLikeButton.addEventListener('click', () => {
+      this._handleLikeClick(this._element.id)
         .then((res) => {
           this._likesNumber = res.likes.length;
           this._elementLikeCounter.textContent = this._likesNumber;
           this._toggleLikeButton();
-        })
-        .catch((err) => {
-          console.log(err);
         });
     });
 
@@ -76,5 +74,6 @@ export default class Card {
 
   _toggleLikeButton() {
     this._elementLikeButton.classList.toggle('element__like_active');
+    this.isLiked = !this.isLiked;
   }
 }
